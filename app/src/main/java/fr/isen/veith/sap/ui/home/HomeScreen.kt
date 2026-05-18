@@ -26,8 +26,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import fr.isen.veith.sap.R
 import fr.isen.veith.sap.domain.model.PlantMood
 import fr.isen.veith.sap.ui.theme.*
 
@@ -159,9 +161,9 @@ private fun HomeHeader(
     onSettings: () -> Unit
 ) {
     val greeting = when (java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)) {
-        in 5..11  -> "Bonjour"
-        in 12..17 -> "Bon après-midi"
-        else      -> "Bonsoir"
+        in 5..11  -> stringResource(R.string.greeting_morning)
+        in 12..17 -> stringResource(R.string.greeting_afternoon)
+        else      -> stringResource(R.string.greeting_evening)
     }
 
     Box {
@@ -187,7 +189,7 @@ private fun HomeHeader(
                         color = Green200.copy(alpha = 0.8f)
                     )
                     Text(
-                        text  = "Voici comment va ta plante",
+                        text  = stringResource(R.string.home_subtitle),
                         style = MaterialTheme.typography.labelSmall,
                         color = Green400.copy(alpha = 0.6f)
                     )
@@ -195,7 +197,7 @@ private fun HomeHeader(
                 IconButton(onClick = onSettings) {
                     Icon(
                         imageVector        = Icons.Default.Settings,
-                        contentDescription = "Réglages",
+                        contentDescription = stringResource(R.string.cd_settings),
                         tint               = Green200.copy(alpha = 0.7f)
                     )
                 }
@@ -211,7 +213,7 @@ private fun HomeHeader(
                 // Nom de la plante cliquable
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text  = "Plante active",
+                        text  = stringResource(R.string.active_plant),
                         style = MaterialTheme.typography.labelSmall,
                         color = Green400.copy(alpha = 0.65f)
                     )
@@ -238,7 +240,7 @@ private fun HomeHeader(
                         )
                         Icon(
                             imageVector        = Icons.Default.KeyboardArrowDown,
-                            contentDescription = "Changer de plante",
+                            contentDescription = stringResource(R.string.cd_change_plant),
                             tint               = Orange200,
                             modifier           = Modifier
                                 .size(20.dp)
@@ -259,10 +261,10 @@ private fun HomeHeader(
             // Label humeur
             Text(
                 text  = when (mood) {
-                    PlantMood.HAPPY     -> "Ta plante est heureuse ! 🌟"
-                    PlantMood.NEUTRAL   -> "Ta plante va bien"
-                    PlantMood.CONCERNED -> "Ta plante a besoin d'attention"
-                    PlantMood.SAD       -> "Ta plante souffre, agis vite !"
+                    PlantMood.HAPPY     -> stringResource(R.string.mood_happy)
+                    PlantMood.NEUTRAL   -> stringResource(R.string.mood_neutral)
+                    PlantMood.CONCERNED -> stringResource(R.string.mood_concerned)
+                    PlantMood.SAD       -> stringResource(R.string.mood_sad)
                 },
                 style = MaterialTheme.typography.bodyMedium,
                 color = when (mood) {
@@ -311,7 +313,7 @@ private fun SensorSection(
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         SensorCard(
-            label    = "Humidité",
+            label    = stringResource(R.string.sensor_humidity),
             value    = "${humidity.toInt()}%",
             icon     = "💧",
             progress = humidity / 100f,
@@ -321,7 +323,7 @@ private fun SensorSection(
             animationDelay = 0
         )
         SensorCard(
-            label    = "Lumière",
+            label    = stringResource(R.string.sensor_light),
             value    = "${(luminosity / 1000).let { "%.1f".format(it) }}k lux",
             icon     = "☀️",
             progress = (luminosity / 10000f).coerceIn(0f, 1f),
@@ -331,7 +333,7 @@ private fun SensorSection(
             animationDelay = 150
         )
         SensorCard(
-            label    = "Temp.",
+            label    = stringResource(R.string.sensor_temp),
             value    = "${"%.1f".format(temperature)}°C",
             icon     = "🌡️",
             progress = ((temperature - 0f) / 40f).coerceIn(0f, 1f),
@@ -449,17 +451,17 @@ private fun TipsSection(
     sensorData: fr.isen.veith.sap.domain.model.SensorData,
     modifier: Modifier = Modifier
 ) {
+    val tipTooDry   = stringResource(R.string.tip_too_dry)
+    val tipTooWet   = stringResource(R.string.tip_too_wet)
+    val tipLowLight = stringResource(R.string.tip_low_light)
+    val tipTooCold  = stringResource(R.string.tip_too_cold)
+    val tipTooHot   = stringResource(R.string.tip_too_hot)
     val tips = buildList {
-        if (sensorData.humidity < plant.humidityMin)
-            add("💧" to "Sol trop sec — il est temps d'arroser !")
-        if (sensorData.humidity > plant.humidityMax)
-            add("💦" to "Sol trop humide — attends avant d'arroser.")
-        if (sensorData.luminosity < plant.luxMin)
-            add("☀️" to "Manque de lumière — rapproche du fenêtre.")
-        if (sensorData.temperature < plant.tempMin)
-            add("🥶" to "Trop froid — éloigne des courants d'air.")
-        if (sensorData.temperature > plant.tempMax)
-            add("🥵" to "Trop chaud — aère la pièce.")
+        if (sensorData.humidity < plant.humidityMin)    add("💧" to tipTooDry)
+        if (sensorData.humidity > plant.humidityMax)    add("💦" to tipTooWet)
+        if (sensorData.luminosity < plant.luxMin)       add("☀️" to tipLowLight)
+        if (sensorData.temperature < plant.tempMin)     add("🥶" to tipTooCold)
+        if (sensorData.temperature > plant.tempMax)     add("🥵" to tipTooHot)
         if (isEmpty()) {
             add("🌿" to plant.wateringTip)
             add("💡" to plant.lightTip)
@@ -468,7 +470,7 @@ private fun TipsSection(
 
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
-            text  = "Conseils du moment",
+            text  = stringResource(R.string.tips_title),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
             fontWeight = FontWeight.Medium
@@ -538,7 +540,7 @@ private fun RecognitionButton(
         )
         Spacer(Modifier.width(8.dp))
         Text(
-            text  = "Identifier une plante",
+            text  = stringResource(R.string.btn_identify_plant),
             style = MaterialTheme.typography.bodyLarge
         )
     }
@@ -569,7 +571,7 @@ private fun PairingButton(
         )
         Spacer(Modifier.width(8.dp))
         Text(
-            text  = "Appairer un pot",
+            text  = stringResource(R.string.btn_pair_pot),
             style = MaterialTheme.typography.bodyLarge
         )
     }

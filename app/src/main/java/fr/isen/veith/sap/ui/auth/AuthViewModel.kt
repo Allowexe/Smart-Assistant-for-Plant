@@ -1,7 +1,9 @@
 package fr.isen.veith.sap.ui.auth
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import fr.isen.veith.sap.R
 import fr.isen.veith.sap.data.repository.AuthRepository
 import fr.isen.veith.sap.data.repository.AuthResult
 import fr.isen.veith.sap.data.repository.FakeAuthRepository
@@ -32,9 +34,8 @@ data class AuthUiState(
 )
 
 // ── ViewModel ───────────────────────────────────────────────────────
-class AuthViewModel(
+class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: AuthRepository = FakeAuthRepository()
-) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState: StateFlow<AuthUiState> = _uiState.asStateFlow()
@@ -98,10 +99,11 @@ class AuthViewModel(
 
     // ── Validation ────────────────────────────────────────────────
     private fun validateLogin(state: AuthUiState): Boolean {
+        val ctx = getApplication<Application>()
         val error = when {
-            state.loginEmail.isBlank()      -> "Veuillez saisir votre email."
-            !state.loginEmail.contains("@") -> "Format d'email invalide."
-            state.loginPassword.length < 6  -> "Le mot de passe doit contenir au moins 6 caractères."
+            state.loginEmail.isBlank()      -> ctx.getString(R.string.error_email_empty)
+            !state.loginEmail.contains("@") -> ctx.getString(R.string.error_email_invalid)
+            state.loginPassword.length < 6  -> ctx.getString(R.string.error_password_short)
             else                            -> null
         }
         if (error != null) _uiState.update { it.copy(errorMessage = error) }
@@ -109,11 +111,12 @@ class AuthViewModel(
     }
 
     private fun validateRegister(state: AuthUiState): Boolean {
+        val ctx = getApplication<Application>()
         val error = when {
-            state.regUsername.isBlank()     -> "Veuillez saisir un nom d'utilisateur."
-            state.regEmail.isBlank()        -> "Veuillez saisir votre email."
-            !state.regEmail.contains("@")   -> "Format d'email invalide."
-            state.regPassword.length < 6    -> "Le mot de passe doit contenir au moins 6 caractères."
+            state.regUsername.isBlank()     -> ctx.getString(R.string.error_username_empty)
+            state.regEmail.isBlank()        -> ctx.getString(R.string.error_email_empty)
+            !state.regEmail.contains("@")   -> ctx.getString(R.string.error_email_invalid)
+            state.regPassword.length < 6    -> ctx.getString(R.string.error_password_short)
             else                            -> null
         }
         if (error != null) _uiState.update { it.copy(errorMessage = error) }

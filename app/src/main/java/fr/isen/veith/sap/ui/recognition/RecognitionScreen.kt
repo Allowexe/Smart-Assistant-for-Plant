@@ -30,7 +30,9 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import fr.isen.veith.sap.R
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -189,7 +191,7 @@ private fun CameraViewfinder(
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = Color.White)
             }
             Text(
-                text     = "Identifier une plante",
+                text     = stringResource(R.string.recognition_title),
                 color    = Color.White,
                 style    = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.align(Alignment.Center)
@@ -201,7 +203,7 @@ private fun CameraViewfinder(
 
         // Conseil
         Text(
-            text     = "Centrez la plante dans le cadre",
+            text     = stringResource(R.string.recognition_hint),
             color    = Color.White.copy(alpha = 0.75f),
             style    = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
@@ -325,7 +327,7 @@ private fun ResultsScreen(
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = Green200)
             }
             Text(
-                text     = "Résultats",
+                text     = stringResource(R.string.results_title),
                 style    = MaterialTheme.typography.titleLarge,
                 color    = Green50,
                 modifier = Modifier.align(Alignment.Center)
@@ -367,7 +369,7 @@ private fun ResultsScreen(
                 // Autres résultats
                 if (results.size > 1) {
                     Text(
-                        text     = "AUTRES POSSIBILITÉS",
+                        text     = stringResource(R.string.other_results),
                         style    = MaterialTheme.typography.labelSmall,
                         color    = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.45f),
                         modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp)
@@ -402,7 +404,7 @@ private fun ResultsScreen(
                         Icon(Icons.Default.CameraAlt, null,
                             tint = Green400, modifier = Modifier.size(16.dp))
                         Spacer(Modifier.width(6.dp))
-                        Text("Reprendre", color = Green400)
+                        Text(stringResource(R.string.btn_retake), color = Green400)
                     }
                     Button(
                         onClick  = onSave,
@@ -416,7 +418,7 @@ private fun ResultsScreen(
                     ) {
                         Icon(Icons.Default.Save, null, modifier = Modifier.size(16.dp))
                         Spacer(Modifier.width(6.dp))
-                        Text("Enregistrer")
+                        Text(stringResource(R.string.btn_save))
                     }
                 }
 
@@ -482,7 +484,7 @@ private fun MainResultCard(result: IdentificationResult, modifier: Modifier = Mo
                     )
                     result.family?.let {
                         Text(
-                            text  = "Famille : $it",
+                            text  = stringResource(R.string.family_label, it),
                             style = MaterialTheme.typography.labelSmall,
                             color = Green400.copy(alpha = 0.8f)
                         )
@@ -495,7 +497,7 @@ private fun MainResultCard(result: IdentificationResult, modifier: Modifier = Mo
             // Barre de confiance
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text  = "Confiance",
+                    text  = stringResource(R.string.confidence_label),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     modifier = Modifier.width(80.dp)
@@ -595,13 +597,13 @@ private fun AnalyzingIndicator(modifier: Modifier = Modifier) {
         CircularProgressIndicator(color = Green400, modifier = Modifier.size(32.dp))
         Spacer(Modifier.height(12.dp))
         Text(
-            text      = "Identification en cours...",
+            text      = stringResource(R.string.analyzing_title),
             style     = MaterialTheme.typography.bodyMedium,
             color     = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
         )
         Text(
-            text      = "Interrogation de la base PlantNet",
+            text      = stringResource(R.string.analyzing_subtitle),
             style     = MaterialTheme.typography.labelSmall,
             color     = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
             textAlign = TextAlign.Center
@@ -634,10 +636,10 @@ private fun ErrorCard(
         Spacer(Modifier.height(16.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             TextButton(onClick = onRetake) {
-                Text("Reprendre une photo", color = Green400)
+                Text(stringResource(R.string.btn_retake_photo), color = Green400)
             }
             TextButton(onClick = onRetry) {
-                Text("Réessayer", color = Orange400)
+                Text(stringResource(R.string.btn_retry), color = Orange400)
             }
         }
     }
@@ -659,14 +661,14 @@ private fun PermissionDeniedScreen(onRequest: () -> Unit, onBack: () -> Unit) {
         Text("📷", fontSize = 56.sp)
         Spacer(Modifier.height(16.dp))
         Text(
-            text      = "Accès à la caméra requis",
+            text      = stringResource(R.string.camera_permission_title),
             style     = MaterialTheme.typography.titleLarge,
             color     = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
         )
         Spacer(Modifier.height(8.dp))
         Text(
-            text      = "L'identification de plantes nécessite l'accès à la caméra pour prendre des photos.",
+            text      = stringResource(R.string.camera_permission_message),
             style     = MaterialTheme.typography.bodyMedium,
             color     = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
             textAlign = TextAlign.Center
@@ -677,11 +679,11 @@ private fun PermissionDeniedScreen(onRequest: () -> Unit, onBack: () -> Unit) {
             colors  = ButtonDefaults.buttonColors(containerColor = Green800),
             shape   = RoundedCornerShape(14.dp)
         ) {
-            Text("Autoriser la caméra", color = Color.White)
+            Text(stringResource(R.string.btn_allow_camera), color = Color.White)
         }
         Spacer(Modifier.height(12.dp))
         TextButton(onClick = onBack) {
-            Text("Retour", color = Green400)
+            Text(stringResource(R.string.cd_back), color = Green400)
         }
     }
 }
@@ -707,7 +709,7 @@ private fun SaveSuccessToast(plantName: String) {
         )
         Spacer(Modifier.width(8.dp))
         Text(
-            text  = "« $plantName » enregistrée !",
+            text  = stringResource(R.string.save_success, plantName),
             style = MaterialTheme.typography.bodyMedium,
             color = Green50
         )

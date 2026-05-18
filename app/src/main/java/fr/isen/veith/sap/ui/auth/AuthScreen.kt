@@ -28,6 +28,8 @@ import fr.isen.veith.sap.ui.theme.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.ui.res.stringResource
+import fr.isen.veith.sap.R
 
 /**
  * Écran principal d'authentification.
@@ -77,7 +79,7 @@ fun AuthScreen(
                 color = Green100
             )
             Text(
-                text  = "Votre jardin connecté",
+                text  = stringResource(R.string.app_tagline),
                 style = MaterialTheme.typography.labelSmall,
                 color = Green400,
                 letterSpacing = 0.12.sp
@@ -200,13 +202,13 @@ private fun TabSelector(
             .padding(4.dp)
     ) {
         TabItem(
-            text      = "Connexion",
+            text      = stringResource(R.string.tab_login),
             selected  = isLoginTab,
             modifier  = Modifier.weight(1f),
             onClick   = onSelectLogin
         )
         TabItem(
-            text      = "Inscription",
+            text      = stringResource(R.string.tab_register),
             selected  = !isLoginTab,
             modifier  = Modifier.weight(1f),
             onClick   = onSelectRegister
@@ -266,7 +268,7 @@ private fun LoginForm(
         SapTextField(
             value       = email,
             onValueChange = onEmailChange,
-            placeholder = "Adresse e-mail",
+            placeholder = stringResource(R.string.hint_email),
             keyboardType = KeyboardType.Email,
             imeAction    = ImeAction.Next,
             onImeAction  = { focusManager.moveFocus(FocusDirection.Down) }
@@ -275,7 +277,7 @@ private fun LoginForm(
         SapTextField(
             value       = password,
             onValueChange = onPasswordChange,
-            placeholder = "Mot de passe",
+            placeholder = stringResource(R.string.hint_password),
             isPassword   = true,
             passwordVisible = passwordVisible,
             onTogglePwd  = onTogglePwd,
@@ -284,7 +286,7 @@ private fun LoginForm(
         )
         Spacer(Modifier.height(8.dp))
         Text(
-            text     = "Mot de passe oublié ?",
+            text     = stringResource(R.string.forgot_password),
             color    = Orange200,
             style    = MaterialTheme.typography.bodyMedium,
             modifier = Modifier
@@ -294,7 +296,7 @@ private fun LoginForm(
         )
         Spacer(Modifier.height(16.dp))
         SapPrimaryButton(
-            text      = "Se connecter",
+            text      = stringResource(R.string.btn_login),
             isLoading = isLoading,
             onClick   = onSubmit
         )
@@ -321,7 +323,7 @@ private fun RegisterForm(
         SapTextField(
             value       = username,
             onValueChange = onUsernameChange,
-            placeholder = "Nom d'utilisateur",
+            placeholder = stringResource(R.string.hint_username),
             imeAction   = ImeAction.Next,
             onImeAction = { focusManager.moveFocus(FocusDirection.Down) }
         )
@@ -329,7 +331,7 @@ private fun RegisterForm(
         SapTextField(
             value       = email,
             onValueChange = onEmailChange,
-            placeholder  = "Adresse e-mail",
+            placeholder  = stringResource(R.string.hint_email),
             keyboardType = KeyboardType.Email,
             imeAction    = ImeAction.Next,
             onImeAction  = { focusManager.moveFocus(FocusDirection.Down) }
@@ -338,7 +340,7 @@ private fun RegisterForm(
         SapTextField(
             value       = password,
             onValueChange = onPasswordChange,
-            placeholder  = "Mot de passe (6 caractères min.)",
+            placeholder  = stringResource(R.string.hint_password_register),
             isPassword   = true,
             passwordVisible = passwordVisible,
             onTogglePwd  = onTogglePwd,
@@ -347,7 +349,7 @@ private fun RegisterForm(
         )
         Spacer(Modifier.height(20.dp))
         SapPrimaryButton(
-            text      = "Créer mon compte",
+            text      = stringResource(R.string.btn_register),
             isLoading = isLoading,
             onClick   = onSubmit
         )
@@ -395,7 +397,7 @@ private fun SapTextField(
                     Icon(
                         imageVector = if (passwordVisible)
                             Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                        contentDescription = if (passwordVisible) "Masquer" else "Afficher",
+                        contentDescription = stringResource(if (passwordVisible) R.string.pwd_hide else R.string.pwd_show),
                         tint = Green400
                     )
                 }

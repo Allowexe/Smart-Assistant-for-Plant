@@ -1,9 +1,11 @@
 package fr.isen.veith.sap
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import fr.isen.veith.sap.data.preferences.LocaleHelper
 import androidx.compose.animation.*
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -26,6 +28,10 @@ object Routes {
 }
 
 class MainActivity : ComponentActivity() {
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.applyLocale(newBase))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

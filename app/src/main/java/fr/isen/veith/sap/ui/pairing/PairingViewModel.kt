@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import fr.isen.veith.sap.R
 import fr.isen.veith.sap.data.ble.BleDevice
 import fr.isen.veith.sap.data.ble.BleManager
 import fr.isen.veith.sap.data.ble.ConnectionState
@@ -65,7 +66,7 @@ class PairingViewModel(application: Application) : AndroidViewModel(application)
     fun onPermissionsResult(granted: Boolean) {
         _uiState.update { it.copy(missingPermissions = emptyList()) }
         if (granted) startScan()
-        else _uiState.update { it.copy(errorMessage = "Permissions BLE refusées") }
+        else _uiState.update { it.copy(errorMessage = getApplication<Application>().getString(R.string.ble_permissions_denied)) }
     }
 
     fun dismissBluetoothBanner() = _uiState.update { it.copy(showBluetoothOffBanner = false) }

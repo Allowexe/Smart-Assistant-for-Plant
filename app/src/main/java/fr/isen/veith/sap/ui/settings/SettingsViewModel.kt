@@ -10,6 +10,7 @@ import fr.isen.veith.sap.domain.model.Achievement
 import fr.isen.veith.sap.domain.model.Achievements
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.channels.Channel
 
 data class SettingsUiState(
     val username: String              = "",
@@ -32,6 +33,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     private val _uiState = MutableStateFlow(SettingsUiState())
     val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
+
+    private val _languageChanged = Channel<Unit>(Channel.BUFFERED)
+    val languageChanged: Flow<Unit> = _languageChanged.receiveAsFlow()
 
     init {
         // Charger les préférences sauvegardées
@@ -87,6 +91,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             prefsRepo.setLanguage(lang)
             _uiState.update { it.copy(language = lang, showLanguageDialog = false) }
+            _languageChanged.send(Unit)
         }
     }
 

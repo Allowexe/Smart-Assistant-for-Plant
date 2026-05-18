@@ -1,3 +1,123 @@
 <resources>
     <string name="app_name">SAP</string>
+
+    <!-- ── Auth ─────────────────────────────────────────────────────── -->
+    <string name="app_tagline">Votre jardin connecté</string>
+    <string name="tab_login">Connexion</string>
+    <string name="tab_register">Inscription</string>
+    <string name="btn_login">Se connecter</string>
+    <string name="btn_register">Créer mon compte</string>
+    <string name="hint_email">Adresse e-mail</string>
+    <string name="hint_password">Mot de passe</string>
+    <string name="hint_password_register">Mot de passe (6 caractères min.)</string>
+    <string name="hint_username">Nom d\'utilisateur</string>
+    <string name="forgot_password">Mot de passe oublié ?</string>
+    <string name="pwd_show">Afficher</string>
+    <string name="pwd_hide">Masquer</string>
+
+    <!-- Validation -->
+    <string name="error_email_empty">Veuillez saisir votre email.</string>
+    <string name="error_email_invalid">Format d\'email invalide.</string>
+    <string name="error_password_short">Le mot de passe doit contenir au moins 6 caractères.</string>
+    <string name="error_username_empty">Veuillez saisir un nom d\'utilisateur.</string>
+
+    <!-- ── Home ──────────────────────────────────────────────────────── -->
+    <string name="greeting_morning">Bonjour</string>
+    <string name="greeting_afternoon">Bon après-midi</string>
+    <string name="greeting_evening">Bonsoir</string>
+    <string name="home_subtitle">Voici comment va ta plante</string>
+    <string name="cd_settings">Réglages</string>
+    <string name="active_plant">Plante active</string>
+    <string name="cd_change_plant">Changer de plante</string>
+
+    <!-- Humeur plante -->
+    <string name="mood_happy">Ta plante est heureuse ! 🌟</string>
+    <string name="mood_neutral">Ta plante va bien</string>
+    <string name="mood_concerned">Ta plante a besoin d\'attention</string>
+    <string name="mood_sad">Ta plante souffre, agis vite !</string>
+
+    <!-- Capteurs -->
+    <string name="sensor_humidity">Humidité</string>
+    <string name="sensor_light">Lumière</string>
+    <string name="sensor_temp">Temp.</string>
+
+    <!-- Conseils -->
+    <string name="tips_title">Conseils du moment</string>
+    <string name="tip_too_dry">Sol trop sec — il est temps d\'arroser !</string>
+    <string name="tip_too_wet">Sol trop humide — attends avant d\'arroser.</string>
+    <string name="tip_low_light">Manque de lumière — rapproche du fenêtre.</string>
+    <string name="tip_too_cold">Trop froid — éloigne des courants d\'air.</string>
+    <string name="tip_too_hot">Trop chaud — aère la pièce.</string>
+
+    <!-- Boutons home -->
+    <string name="btn_identify_plant">Identifier une plante</string>
+    <string name="btn_pair_pot">Appairer un pot</string>
+
+    <!-- ── Settings ───────────────────────────────────────────────────── -->
+    <string name="settings_prefs_section">Préférences</string>
+    <string name="settings_language">Langue</string>
+    <string name="settings_theme">Thème</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_account_section">Compte</string>
+    <string name="settings_app_version">Version de l\'app</string>
+    <string name="settings_logout">Se déconnecter</string>
+    <string name="settings_achievements">SUCCÈS</string>
+
+    <!-- Profil -->
+    <string name="profile_edit">Modifier le profil</string>
+    <string name="profile_done">Terminer</string>
+    <string name="profile_save">Enregistrer</string>
+    <string name="profile_saved">Profil sauvegardé</string>
+    <string name="profile_default_name">Jardinier</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_theme_title">Thème de l\'application</string>
+    <string name="dialog_language_title">Langue</string>
+    <string name="dialog_close">Fermer</string>
+    <string name="dialog_cancel">Annuler</string>
+    <string name="dialog_logout_title">Se déconnecter</string>
+    <string name="dialog_logout_message">Tu vas être déconnecté de ton compte. Tes plantes restent sauvegardées.</string>
+    <string name="dialog_logout_confirm">Déconnecter</string>
+
+    <!-- Thèmes -->
+    <string name="theme_light">Clair</string>
+    <string name="theme_dark">Sombre</string>
+    <string name="theme_system">Appareil</string>
+
+    <!-- ── Pairing ────────────────────────────────────────────────────── -->
+    <string name="pairing_title">Appairage</string>
+    <string name="cd_back">Retour</string>
+    <string name="scan_idle">Prêt à scanner</string>
+    <string name="scan_scanning">Recherche en cours…</string>
+    <string name="scan_stopped">Scan terminé</string>
+    <string name="btn_start_scan">Lancer le scan BLE</string>
+    <string name="btn_stop_scan">Arrêter le scan</string>
+    <string name="devices_header">APPAREILS DÉTECTÉS (%d)</string>
+    <string name="no_devices_title">Aucun appareil trouvé</string>
+    <string name="no_devices_hint">Vérifiez que votre pot est allumé\net à portée Bluetooth</string>
+    <string name="btn_retry">Réessayer</string>
+    <string name="pair_device">Appairer « %s »</string>
+    <string name="pair_no_device">Sélectionnez un appareil</string>
+    <string name="connecting">Connexion en cours…</string>
+    <string name="device_connected">Appareil connecté !</string>
+    <string name="bluetooth_off">Bluetooth désactivé — activez-le dans les réglages</string>
+    <string name="ble_permissions_denied">Permissions BLE refusées</string>
+
+    <!-- ── Recognition ───────────────────────────────────────────────── -->
+    <string name="recognition_title">Identifier une plante</string>
+    <string name="recognition_hint">Centrez la plante dans le cadre</string>
+    <string name="analyzing_title">Identification en cours…</string>
+    <string name="analyzing_subtitle">Interrogation de la base PlantNet</string>
+    <string name="results_title">Résultats</string>
+    <string name="other_results">AUTRES POSSIBILITÉS</string>
+    <string name="confidence_label">Confiance</string>
+    <string name="family_label">Famille : %s</string>
+    <string name="btn_retake">Reprendre</string>
+    <string name="btn_retake_photo">Reprendre une photo</string>
+    <string name="btn_save">Enregistrer</string>
+    <string name="camera_permission_title">Accès à la caméra requis</string>
+    <string name="camera_permission_message">L\'identification de plantes nécessite l\'accès à la caméra pour prendre des photos.</string>
+    <string name="btn_allow_camera">Autoriser la caméra</string>
+    <string name="save_success">« %s » enregistrée !</string>
+    <string name="photo_error">Erreur photo : %s</string>
 </resources>

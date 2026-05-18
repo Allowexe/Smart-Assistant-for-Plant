@@ -1,5 +1,6 @@
 package fr.isen.veith.sap.ui.settings
 
+import android.app.Activity
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
@@ -21,7 +22,10 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import fr.isen.veith.sap.R
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,6 +46,11 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = viewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val activity = LocalContext.current as? Activity
+
+    LaunchedEffect(viewModel) {
+        viewModel.languageChanged.collect { activity?.recreate() }
+    }
 
     Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).windowInsetsPadding(WindowInsets.statusBars)) {
 
@@ -63,24 +72,24 @@ fun SettingsScreen(
             Spacer(Modifier.height(20.dp))
 
             // ── Préférences ───────────────────────────────────────────
-            SettingsSection(title = "Préférences") {
+            SettingsSection(title = stringResource(R.string.settings_prefs_section)) {
                 SettingsRow(
                     icon     = Icons.Default.Language,
-                    label    = "Langue",
+                    label    = stringResource(R.string.settings_language),
                     value    = state.language.label,
                     onClick  = viewModel::showLanguageDialog
                 )
                 SettingsDivider()
                 SettingsRow(
                     icon     = Icons.Default.Palette,
-                    label    = "Thème",
-                    value    = state.theme.label,
+                    label    = stringResource(R.string.settings_theme),
+                    value    = state.theme.localizedLabel(),
                     onClick  = viewModel::showThemeDialog
                 )
                 SettingsDivider()
                 SettingsToggleRow(
                     icon     = Icons.Default.Notifications,
-                    label    = "Notifications",
+                    label    = stringResource(R.string.settings_notifications),
                     checked  = state.notificationsEnabled,
                     onToggle = viewModel::toggleNotifications
                 )
@@ -94,17 +103,17 @@ fun SettingsScreen(
             Spacer(Modifier.height(20.dp))
 
             // ── Compte ────────────────────────────────────────────────
-            SettingsSection(title = "Compte") {
+            SettingsSection(title = stringResource(R.string.settings_account_section)) {
                 SettingsRow(
                     icon    = Icons.Default.Info,
-                    label   = "Version de l'app",
+                    label   = stringResource(R.string.settings_app_version),
                     value   = "1.0.0",
                     onClick = {}
                 )
                 SettingsDivider()
                 SettingsRow(
                     icon      = Icons.AutoMirrored.Filled.Logout,
-                    label     = "Se déconnecter",
+                    label     = stringResource(R.string.settings_logout),
                     value     = "",
                     textColor = Color(0xFFCF6679),
                     onClick   = viewModel::showLogoutDialog
@@ -205,7 +214,7 @@ private fun ProfileHeader(
                 )
                 Spacer(Modifier.width(4.dp))
                 Text(
-                    text  = if (editMode) "Terminer" else "Modifier le profil",
+                    text  = if (editMode) stringResource(R.string.profile_done) else stringResource(R.string.profile_edit),
                     color = Orange200,
                     style = MaterialTheme.typography.labelSmall
                 )
@@ -225,14 +234,14 @@ private fun ProfileHeader(
                     ProfileTextField(
                         value         = username,
                         onValueChange = onUsernameChange,
-                        placeholder   = "Nom d'utilisateur",
+                        placeholder   = stringResource(R.string.hint_username),
                         icon          = Icons.Default.Person
                     )
                     Spacer(Modifier.height(8.dp))
                     ProfileTextField(
                         value         = email,
                         onValueChange = onEmailChange,
-                        placeholder   = "Adresse e-mail",
+                        placeholder   = stringResource(R.string.hint_email),
                         icon          = Icons.Default.Email
                     )
                     Spacer(Modifier.height(12.dp))
@@ -244,7 +253,7 @@ private fun ProfileHeader(
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("Enregistrer")
+                        Text(stringResource(R.string.profile_save))
                     }
                 }
             }
@@ -257,7 +266,7 @@ private fun ProfileHeader(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text  = username.ifBlank { "Jardinier" },
+                        text  = username.ifBlank { stringResource(R.string.profile_default_name) },
                         style = MaterialTheme.typography.titleLarge,
                         color = Green50
                     )
@@ -292,7 +301,7 @@ private fun ProfileHeader(
                         modifier = Modifier.size(14.dp)
                     )
                     Spacer(Modifier.width(4.dp))
-                    Text("Profil sauvegardé", color = Green200, style = MaterialTheme.typography.labelSmall)
+                    Text(stringResource(R.string.profile_saved), color = Green200, style = MaterialTheme.typography.labelSmall)
                 }
             }
 
@@ -484,7 +493,7 @@ private fun AchievementsSection(achievements: List<Achievement>) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text  = "SUCCÈS",
+                text  = stringResource(R.string.settings_achievements),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.45f)
             )
@@ -639,16 +648,24 @@ private fun AchievementCard(
 // ─────────────────────────────────────────────────────────────────────
 // Dialogs
 // ─────────────────────────────────────────────────────────────────────
+
+@Composable
+private fun AppTheme.localizedLabel(): String = when (this) {
+    AppTheme.LIGHT  -> stringResource(R.string.theme_light)
+    AppTheme.DARK   -> stringResource(R.string.theme_dark)
+    AppTheme.SYSTEM -> stringResource(R.string.theme_system)
+}
+
 @Composable
 private fun ThemePickerDialog(
     current: AppTheme,
     onSelect: (AppTheme) -> Unit,
     onDismiss: () -> Unit
 ) {
-    SapPickerDialog(title = "Thème de l'application", onDismiss = onDismiss) {
+    SapPickerDialog(title = stringResource(R.string.dialog_theme_title), onDismiss = onDismiss) {
         AppTheme.entries.forEach { theme ->
             PickerOption(
-                label      = theme.label,
+                label      = theme.localizedLabel(),
                 icon       = when (theme) {
                     AppTheme.LIGHT  -> "☀️"
                     AppTheme.DARK   -> "🌙"
@@ -667,7 +684,7 @@ private fun LanguagePickerDialog(
     onSelect: (AppLanguage) -> Unit,
     onDismiss: () -> Unit
 ) {
-    SapPickerDialog(title = "Langue", onDismiss = onDismiss) {
+    SapPickerDialog(title = stringResource(R.string.dialog_language_title), onDismiss = onDismiss) {
         AppLanguage.entries.forEach { lang ->
             PickerOption(
                 label      = lang.label,
@@ -685,23 +702,23 @@ private fun LogoutConfirmDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
         onDismissRequest = onDismiss,
         containerColor   = MaterialTheme.colorScheme.surface,
         title = {
-            Text("Se déconnecter", color = MaterialTheme.colorScheme.onSurface)
+            Text(stringResource(R.string.dialog_logout_title), color = MaterialTheme.colorScheme.onSurface)
         },
         text = {
             Text(
-                "Tu vas être déconnecté de ton compte. Tes plantes restent sauvegardées.",
+                stringResource(R.string.dialog_logout_message),
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                 style = MaterialTheme.typography.bodyMedium
             )
         },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text("Déconnecter", color = Color(0xFFCF6679))
+                Text(stringResource(R.string.dialog_logout_confirm), color = Color(0xFFCF6679))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Annuler", color = Green400)
+                Text(stringResource(R.string.dialog_cancel), color = Green400)
             }
         }
     )
@@ -725,7 +742,7 @@ private fun SapPickerDialog(
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("Fermer", color = Green400)
+                Text(stringResource(R.string.dialog_close), color = Green400)
             }
         }
     )

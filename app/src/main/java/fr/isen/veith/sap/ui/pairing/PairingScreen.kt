@@ -26,8 +26,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import fr.isen.veith.sap.R
 import fr.isen.veith.sap.data.ble.BleDevice
 import fr.isen.veith.sap.data.ble.ConnectionState
 import fr.isen.veith.sap.data.ble.ScanState
@@ -191,12 +193,12 @@ private fun PairingHeader(onBack: () -> Unit) {
         IconButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterStart)) {
             Icon(
                 Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Retour",
+                contentDescription = stringResource(R.string.cd_back),
                 tint = Green200
             )
         }
         Text(
-            text     = "Appairage",
+            text     = stringResource(R.string.pairing_title),
             style    = MaterialTheme.typography.titleLarge,
             color    = Green50,
             modifier = Modifier.align(Alignment.Center)
@@ -289,10 +291,13 @@ private fun RadarAnimation(isScanning: Boolean, modifier: Modifier = Modifier) {
 // ─────────────────────────────────────────────────────────────────────
 @Composable
 private fun ScanStatusText(scanState: ScanState) {
+    val idleText    = stringResource(R.string.scan_idle)
+    val scanningText = stringResource(R.string.scan_scanning)
+    val stoppedText = stringResource(R.string.scan_stopped)
     val (text, color) = when (scanState) {
-        is ScanState.Idle     -> "Prêt à scanner" to MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
-        is ScanState.Scanning -> "Recherche en cours..." to Green400
-        is ScanState.Stopped  -> "Scan terminé" to MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+        is ScanState.Idle     -> idleText    to MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+        is ScanState.Scanning -> scanningText to Green400
+        is ScanState.Stopped  -> stoppedText to MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
         is ScanState.Error    -> scanState.message to Color(0xFFCF6679)
     }
 
@@ -347,7 +352,7 @@ private fun ScanButton(
                         strokeWidth = 2.dp
                     )
                     Spacer(Modifier.width(8.dp))
-                    Text("Arrêter le scan")
+                    Text(stringResource(R.string.btn_stop_scan))
                 } else {
                     Icon(
                         Icons.Default.Search,
@@ -355,7 +360,7 @@ private fun ScanButton(
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(Modifier.width(8.dp))
-                    Text("Lancer le scan BLE")
+                    Text(stringResource(R.string.btn_start_scan))
                 }
             }
         }
@@ -374,7 +379,7 @@ private fun DeviceList(
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
-            text     = "APPAREILS DÉTECTÉS (${devices.size})",
+            text     = stringResource(R.string.devices_header, devices.size),
             style    = MaterialTheme.typography.labelSmall,
             color    = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.45f),
             modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
@@ -520,20 +525,20 @@ private fun EmptyDevicesMessage(onRetry: () -> Unit, modifier: Modifier = Modifi
         Text("😕", fontSize = 36.sp)
         Spacer(Modifier.height(8.dp))
         Text(
-            text      = "Aucun appareil trouvé",
+            text      = stringResource(R.string.no_devices_title),
             style     = MaterialTheme.typography.bodyMedium,
             color     = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
         )
         Text(
-            text      = "Vérifiez que votre pot est allumé\net à portée Bluetooth",
+            text      = stringResource(R.string.no_devices_hint),
             style     = MaterialTheme.typography.bodyMedium,
             color     = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
             textAlign = TextAlign.Center
         )
         Spacer(Modifier.height(12.dp))
         TextButton(onClick = onRetry) {
-            Text("Réessayer", color = Green400)
+            Text(stringResource(R.string.btn_retry), color = Green400)
         }
     }
 }
@@ -577,7 +582,7 @@ private fun PairButton(
                         strokeWidth = 2.dp
                     )
                     Spacer(Modifier.width(10.dp))
-                    Text("Connexion en cours...")
+                    Text(stringResource(R.string.connecting))
                 }
             } else {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -588,8 +593,8 @@ private fun PairButton(
                     )
                     Spacer(Modifier.width(8.dp))
                     Text(
-                        text = device?.let { "Appairer « ${it.name.take(20)} »" }
-                            ?: "Sélectionnez un appareil"
+                        text = device?.let { stringResource(R.string.pair_device, it.name.take(20)) }
+                            ?: stringResource(R.string.pair_no_device)
                     )
                 }
             }
@@ -617,13 +622,13 @@ private fun BluetoothOffBanner(onDismiss: () -> Unit) {
         )
         Spacer(Modifier.width(10.dp))
         Text(
-            text     = "Bluetooth désactivé — activez-le dans les réglages",
+            text     = stringResource(R.string.bluetooth_off),
             style    = MaterialTheme.typography.bodyMedium,
             color    = Orange100,
             modifier = Modifier.weight(1f)
         )
         IconButton(onClick = onDismiss, modifier = Modifier.size(28.dp)) {
-            Icon(Icons.Default.Close, contentDescription = "Fermer", tint = Orange200)
+            Icon(Icons.Default.Close, contentDescription = stringResource(R.string.dialog_close), tint = Orange200)
         }
     }
 }
@@ -657,7 +662,7 @@ private fun ConnectedOverlay(device: BleDevice?) {
         }
         Spacer(Modifier.height(14.dp))
         Text(
-            text  = "Appareil connecté !",
+            text  = stringResource(R.string.device_connected),
             style = MaterialTheme.typography.titleLarge,
             color = Green50
         )

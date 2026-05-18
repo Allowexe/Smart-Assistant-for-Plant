@@ -71,6 +71,7 @@ class AppPreferencesRepository(private val context: Context) {
 
     suspend fun setLanguage(language: AppLanguage) {
         context.dataStore.edit { it[Keys.LANGUAGE] = language.name }
+        LocaleHelper.save(context, language)
     }
 
     suspend fun setNotifications(enabled: Boolean) {
