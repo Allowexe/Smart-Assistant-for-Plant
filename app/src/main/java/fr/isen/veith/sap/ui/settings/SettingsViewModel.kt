@@ -3,6 +3,7 @@ package fr.isen.veith.sap.ui.settings
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import fr.isen.veith.sap.data.preferences.AppLanguage
 import fr.isen.veith.sap.data.preferences.AppPreferencesRepository
 import fr.isen.veith.sap.data.preferences.AppTheme
@@ -105,7 +106,11 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
 
     // ── Déconnexion ───────────────────────────────────────────────────
-    fun showLogoutDialog()   = _uiState.update { it.copy(showLogoutDialog = true) }
+    fun showLogoutDialog()    = _uiState.update { it.copy(showLogoutDialog = true) }
     fun dismissLogoutDialog() = _uiState.update { it.copy(showLogoutDialog = false) }
-    // La navigation vers Auth est gérée dans le composable via callback
+
+    fun logout(onDone: () -> Unit) {
+        FirebaseAuth.getInstance().signOut()
+        onDone()
+    }
 }

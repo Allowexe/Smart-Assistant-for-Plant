@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -213,7 +215,7 @@ private fun PairingHeader(onBack: () -> Unit) {
 private fun RadarAnimation(isScanning: Boolean, modifier: Modifier = Modifier) {
     val infiniteTransition = rememberInfiniteTransition(label = "radar")
 
-    // 3 anneaux avec délais décalés
+    // 3 expanding rings
     val scales = (0..2).map { index ->
         infiniteTransition.animateFloat(
             initialValue  = 0.4f,
@@ -225,9 +227,9 @@ private fun RadarAnimation(isScanning: Boolean, modifier: Modifier = Modifier) {
             label = "ring_$index"
         )
     }
-    val alphas = (0..2).map { index ->
+    val ringAlphas = (0..2).map { index ->
         infiniteTransition.animateFloat(
-            initialValue  = if (isScanning) 0.7f else 0.3f,
+            initialValue  = if (isScanning) 0.5f else 0.2f,
             targetValue   = 0f,
             animationSpec = infiniteRepeatable(
                 animation  = tween(2000, delayMillis = index * 600),
@@ -237,10 +239,21 @@ private fun RadarAnimation(isScanning: Boolean, modifier: Modifier = Modifier) {
         )
     }
 
-    // Pulsation du centre
+    // Sweep rotation — full circle in 2.5s
+    val sweepRotation by infiniteTransition.animateFloat(
+        initialValue  = 0f,
+        targetValue   = 360f,
+        animationSpec = infiniteRepeatable(
+            animation  = tween(2500, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "sweep_rot"
+    )
+
+    // Center pulse
     val centerScale by infiniteTransition.animateFloat(
         initialValue  = 1f,
-        targetValue   = if (isScanning) 1.1f else 1f,
+        targetValue   = if (isScanning) 1.12f else 1f,
         animationSpec = infiniteRepeatable(
             animation  = tween(800, easing = EaseInOutSine),
             repeatMode = RepeatMode.Reverse
@@ -248,31 +261,62 @@ private fun RadarAnimation(isScanning: Boolean, modifier: Modifier = Modifier) {
         label = "center"
     )
 
+    // Sweep fades in when scanning starts
+    val sweepAlpha by animateFloatAsState(
+        targetValue   = if (isScanning) 1f else 0f,
+        animationSpec = tween(400),
+        label         = "sweep_alpha"
+    )
+
     Box(
-        modifier         = modifier.size(140.dp),
+        modifier         = modifier.size(160.dp),
         contentAlignment = Alignment.Center
     ) {
-        // Anneaux de propagation
-        scales.forEachIndexed { index, scale ->
-            Box(
-                modifier = Modifier
-                    .size(120.dp)
-                    .scale(scale.value)
-                    .clip(CircleShape)
-                    .background(Green400.copy(alpha = alphas[index].value))
+        // Radar sweep — 90° arc trail rotating clockwise
+        Canvas(
+            modifier = Modifier
+                .size(130.dp)
+                .rotate(sweepRotation)
+                .alpha(sweepAlpha)
+        ) {
+            val slices = 24
+            repeat(slices) { i ->
+                val sliceAlpha = ((slices - i).toFloat() / slices) * 0.5f
+                drawArc(
+                    color      = Green400.copy(alpha = sliceAlpha),
+                    startAngle = -(i * (90f / slices)),
+                    sweepAngle = 90f / slices,
+                    useCenter  = true
+                )
+            }
+            // Bright leading edge
+            drawArc(
+                color      = Green200.copy(alpha = 0.85f * sweepAlpha),
+                startAngle = -1.5f,
+                sweepAngle = 3f,
+                useCenter  = true
             )
         }
 
-        // Cercle central
+        // Expanding rings
+        scales.forEachIndexed { index, scale ->
+            Box(
+                modifier = Modifier
+                    .size(130.dp)
+                    .scale(scale.value)
+                    .clip(CircleShape)
+                    .background(Green400.copy(alpha = ringAlphas[index].value))
+            )
+        }
+
+        // Center circle + Bluetooth icon
         Box(
             modifier = Modifier
-                .size(52.dp)
+                .size(54.dp)
                 .scale(centerScale)
                 .clip(CircleShape)
                 .background(
-                    Brush.radialGradient(
-                        colors = listOf(Green600, Green800)
-                    )
+                    Brush.radialGradient(colors = listOf(Green600, Green800))
                 ),
             contentAlignment = Alignment.Center
         ) {

@@ -3,6 +3,7 @@ package fr.isen.veith.sap.data.preferences
 import android.content.Context
 import android.os.LocaleList
 import java.util.Locale
+import androidx.core.content.edit
 
 object LocaleHelper {
     private const val PREFS_NAME = "locale_prefs"
@@ -21,6 +22,6 @@ object LocaleHelper {
 
     fun save(context: Context, language: AppLanguage) {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            .edit().putString(KEY_LANG, language.code).apply()
+            .edit { putString(KEY_LANG, language.code) }
     }
 }

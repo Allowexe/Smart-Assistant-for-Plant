@@ -142,7 +142,7 @@ fun SettingsScreen(
 
         if (state.showLogoutDialog) {
             LogoutConfirmDialog(
-                onConfirm = { viewModel.dismissLogoutDialog(); onLogout() },
+                onConfirm = { viewModel.dismissLogoutDialog(); viewModel.logout(onLogout) },
                 onDismiss = viewModel::dismissLogoutDialog
             )
         }

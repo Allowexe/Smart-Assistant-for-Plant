@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import fr.isen.veith.sap.R
 import fr.isen.veith.sap.data.repository.AuthRepository
 import fr.isen.veith.sap.data.repository.AuthResult
-import fr.isen.veith.sap.data.repository.FakeAuthRepository
+import fr.isen.veith.sap.data.repository.FirebaseAuthRepository
 import fr.isen.veith.sap.domain.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,7 +35,7 @@ data class AuthUiState(
 
 // ── ViewModel ───────────────────────────────────────────────────────
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: AuthRepository = FakeAuthRepository()
+    private val repository: AuthRepository = FirebaseAuthRepository()
 
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState: StateFlow<AuthUiState> = _uiState.asStateFlow()

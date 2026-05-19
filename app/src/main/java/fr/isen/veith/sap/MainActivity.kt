@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
 import fr.isen.veith.sap.ui.auth.AuthScreen
 import fr.isen.veith.sap.ui.home.HomeScreen
 import fr.isen.veith.sap.ui.pairing.PairingScreen
@@ -47,9 +48,11 @@ class MainActivity : ComponentActivity() {
 fun SapApp() {
     val navController = rememberNavController()
 
+    val start = if (FirebaseAuth.getInstance().currentUser != null) Routes.HOME else Routes.AUTH
+
     NavHost(
         navController    = navController,
-        startDestination = Routes.AUTH,
+        startDestination = start,
         enterTransition  = { fadeIn() + slideInHorizontally { it / 4 } },
         exitTransition   = { fadeOut() + slideOutHorizontally { -it / 4 } },
         popEnterTransition  = { fadeIn() + slideInHorizontally { -it / 4 } },
