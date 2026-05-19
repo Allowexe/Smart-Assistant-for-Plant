@@ -72,6 +72,12 @@ class PairingViewModel(application: Application) : AndroidViewModel(application)
     fun dismissBluetoothBanner() = _uiState.update { it.copy(showBluetoothOffBanner = false) }
     fun dismissError()           = _uiState.update { it.copy(errorMessage = null) }
     fun selectDevice(device: BleDevice) = _uiState.update { it.copy(selectedDevice = device) }
+
+    fun connectDevice(device: BleDevice) {
+        selectDevice(device)
+        BleManager.stopScan()
+        BleManager.connect(device)
+    }
     fun disconnect()             = BleManager.disconnect()
 
     private fun startScan() {

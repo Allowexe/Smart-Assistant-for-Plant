@@ -103,11 +103,7 @@ fun SapApp() {
 
         composable(Routes.PAIRING) {
             PairingScreen(
-                onPaired = {
-                    navController.navigate(Routes.HOME) {
-                        popUpTo(Routes.HOME) { inclusive = false }
-                    }
-                },
+                onPaired = { navController.popBackStack() },
                 onBack   = { navController.popBackStack() }
             )
         }

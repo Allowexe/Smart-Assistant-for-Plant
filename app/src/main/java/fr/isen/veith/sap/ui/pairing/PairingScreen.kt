@@ -6,6 +6,8 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -43,6 +45,7 @@ import fr.isen.veith.sap.ui.theme.*
  * @param onPaired   Callback appelé quand l'appairage est réussi
  * @param onBack     Retour à l'écran précédent
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PairingScreen(
     onPaired: () -> Unit = {},
@@ -51,22 +54,28 @@ fun PairingScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // Naviguer automatiquement si connexion réussie
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showSheet by remember { mutableStateOf(false) }
+
+    // Open sheet when scan starts
+    LaunchedEffect(state.scanState) {
+        if (state.scanState is ScanState.Scanning) showSheet = true
+    }
+
+    // Navigate on connection success and close sheet
     LaunchedEffect(state.connectionState) {
         if (state.connectionState is ConnectionState.Connected) {
+            showSheet = false
             kotlinx.coroutines.delay(1500)
             onPaired()
         }
     }
 
-    // Launcher de permissions
+    // Permission launcher
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
-    ) { results ->
-        viewModel.onPermissionsResult(results.values.all { it })
-    }
+    ) { results -> viewModel.onPermissionsResult(results.values.all { it }) }
 
-    // Demander les permissions si nécessaire
     LaunchedEffect(state.missingPermissions) {
         if (state.missingPermissions.isNotEmpty()) {
             permissionLauncher.launch(state.missingPermissions.toTypedArray())
@@ -80,99 +89,66 @@ fun PairingScreen(
             .windowInsetsPadding(WindowInsets.statusBars)
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // ── Header ────────────────────────────────────────────────
             PairingHeader(onBack = onBack)
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(48.dp))
 
-            // ── Animation radar ───────────────────────────────────────
             RadarAnimation(
-                isScanning = state.scanState is ScanState.Scanning,
-                modifier   = Modifier.align(Alignment.CenterHorizontally)
+                isScanning = state.scanState is ScanState.Scanning
             )
 
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(16.dp))
 
-            // ── Texte état du scan ────────────────────────────────────
             ScanStatusText(state.scanState)
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(32.dp))
 
-            // ── Bouton scan ───────────────────────────────────────────
             ScanButton(
                 scanState = state.scanState,
                 onScan    = viewModel::checkAndStartScan,
                 onStop    = viewModel::stopScan,
-                modifier  = Modifier.padding(horizontal = 20.dp)
+                modifier  = Modifier.padding(horizontal = 20.dp).fillMaxWidth()
             )
-
-            Spacer(Modifier.height(20.dp))
-
-            // ── Liste des appareils ───────────────────────────────────
-            AnimatedVisibility(
-                visible = state.devices.isNotEmpty(),
-                enter   = fadeIn() + expandVertically()
-            ) {
-                DeviceList(
-                    devices        = state.devices,
-                    selectedDevice = state.selectedDevice,
-                    onSelect       = viewModel::selectDevice,
-                    modifier       = Modifier.padding(horizontal = 20.dp)
-                )
-            }
-
-            // Message "aucun appareil" si scan terminé sans résultat
-            AnimatedVisibility(
-                visible = state.scanState is ScanState.Stopped && state.devices.isEmpty(),
-                enter   = fadeIn(),
-                exit    = fadeOut()
-            ) {
-                EmptyDevicesMessage(
-                    onRetry  = viewModel::checkAndStartScan,
-                    modifier = Modifier.padding(horizontal = 20.dp)
-                )
-            }
-
-            Spacer(Modifier.height(20.dp))
-
-            // ── Bouton appairer ───────────────────────────────────────
-            AnimatedVisibility(
-                visible = state.selectedDevice != null,
-                enter   = slideInVertically { it } + fadeIn(),
-                exit    = slideOutVertically { it } + fadeOut()
-            ) {
-                PairButton(
-                    device          = state.selectedDevice,
-                    connectionState = state.connectionState,
-                    onPair          = viewModel::pairSelectedDevice,
-                    modifier        = Modifier.padding(horizontal = 20.dp)
-                )
-            }
-
-            Spacer(Modifier.height(32.dp))
         }
 
-        // ── Banner Bluetooth désactivé ─────────────────────────────
+        // Bluetooth off banner
         AnimatedVisibility(
-            visible = state.showBluetoothOffBanner,
-            enter   = slideInVertically { -it } + fadeIn(),
-            exit    = slideOutVertically { -it } + fadeOut(),
+            visible  = state.showBluetoothOffBanner,
+            enter    = slideInVertically { -it } + fadeIn(),
+            exit     = slideOutVertically { -it } + fadeOut(),
             modifier = Modifier.align(Alignment.TopCenter)
         ) {
             BluetoothOffBanner(onDismiss = viewModel::dismissBluetoothBanner)
         }
 
-        // ── Overlay connexion réussie ──────────────────────────────
+        // Connection success overlay
         AnimatedVisibility(
             visible  = state.connectionState is ConnectionState.Connected,
             enter    = scaleIn(spring(dampingRatio = Spring.DampingRatioMediumBouncy)) + fadeIn(),
             modifier = Modifier.align(Alignment.Center)
         ) {
             ConnectedOverlay(device = (state.connectionState as? ConnectionState.Connected)?.device)
+        }
+    }
+
+    // ── Device picker bottom sheet ─────────────────────────────────────
+    if (showSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showSheet = false; viewModel.stopScan() },
+            sheetState       = sheetState,
+            containerColor   = MaterialTheme.colorScheme.surface,
+            dragHandle       = { BottomSheetDefaults.DragHandle() }
+        ) {
+            DevicePickerSheet(
+                devices        = state.devices,
+                scanState      = state.scanState,
+                connectionState = state.connectionState,
+                onConnect      = viewModel::connectDevice,
+                onRetry        = viewModel::checkAndStartScan
+            )
         }
     }
 }
@@ -182,14 +158,13 @@ fun PairingScreen(
 // ─────────────────────────────────────────────────────────────────────
 @Composable
 private fun PairingHeader(onBack: () -> Unit) {
+    val isDark = LocalSapDarkTheme.current
+    val headerColors = if (isDark) listOf(Green900, Color(0xFF253D25)) else listOf(Green800, Green600)
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(Green900, Color(0xFF253D25))
-                )
-            )
+            .background(Brush.verticalGradient(colors = headerColors))
             .padding(horizontal = 8.dp, vertical = 12.dp)
     ) {
         IconButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterStart)) {
@@ -412,40 +387,90 @@ private fun ScanButton(
 }
 
 // ─────────────────────────────────────────────────────────────────────
-// Liste des appareils détectés
+// Bottom sheet content
 // ─────────────────────────────────────────────────────────────────────
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DeviceList(
+private fun DevicePickerSheet(
     devices: List<BleDevice>,
-    selectedDevice: BleDevice?,
-    onSelect: (BleDevice) -> Unit,
-    modifier: Modifier = Modifier
+    scanState: ScanState,
+    connectionState: ConnectionState,
+    onConnect: (BleDevice) -> Unit,
+    onRetry: () -> Unit
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text     = stringResource(R.string.devices_header, devices.size),
-            style    = MaterialTheme.typography.labelSmall,
-            color    = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.45f),
-            modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
-        )
+    val isConnecting = connectionState is ConnectionState.Connecting
 
-        devices.forEachIndexed { index, device ->
-            var visible by remember { mutableStateOf(false) }
-            LaunchedEffect(device.address) {
-                kotlinx.coroutines.delay(index * 80L)
-                visible = true
-            }
-            AnimatedVisibility(
-                visible = visible,
-                enter   = slideInHorizontally { -it / 3 } + fadeIn()
-            ) {
-                DeviceItem(
-                    device     = device,
-                    isSelected = device.address == selectedDevice?.address,
-                    onClick    = { onSelect(device) }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text  = stringResource(R.string.devices_header, devices.size),
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.weight(1f)
+            )
+            if (scanState is ScanState.Scanning) {
+                CircularProgressIndicator(
+                    modifier    = Modifier.size(18.dp),
+                    color       = Green400,
+                    strokeWidth = 2.dp
                 )
             }
-            if (index < devices.lastIndex) Spacer(Modifier.height(8.dp))
+        }
+
+        Spacer(Modifier.height(4.dp))
+        Text(
+            text  = when (scanState) {
+                is ScanState.Scanning -> stringResource(R.string.scan_scanning)
+                else                  -> stringResource(R.string.scan_stopped)
+            },
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        if (devices.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 32.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                if (scanState is ScanState.Scanning) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        CircularProgressIndicator(color = Green400)
+                        Spacer(Modifier.height(12.dp))
+                        Text(
+                            text  = stringResource(R.string.scan_scanning),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        )
+                    }
+                } else {
+                    EmptyDevicesMessage(onRetry = onRetry)
+                }
+            }
+        } else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding      = PaddingValues(bottom = 32.dp)
+            ) {
+                itemsIndexed(devices, key = { _, d -> d.address }) { _, device ->
+                    DeviceItem(
+                        device      = device,
+                        isSelected  = isConnecting && false,
+                        isConnecting = isConnecting,
+                        onClick     = { if (!isConnecting) onConnect(device) }
+                    )
+                }
+            }
         }
     }
 }
@@ -454,6 +479,7 @@ private fun DeviceList(
 private fun DeviceItem(
     device: BleDevice,
     isSelected: Boolean,
+    isConnecting: Boolean = false,
     onClick: () -> Unit
 ) {
     val borderColor by animateColorAsState(
@@ -474,11 +500,10 @@ private fun DeviceItem(
             .clip(RoundedCornerShape(14.dp))
             .background(bgColor)
             .border(1.dp, borderColor, RoundedCornerShape(14.dp))
-            .clickable(onClick = onClick)
+            .clickable(enabled = !isConnecting, onClick = onClick)
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Icône appareil
         Box(
             modifier = Modifier
                 .size(42.dp)
@@ -489,10 +514,7 @@ private fun DeviceItem(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text     = if (device.isSap) "🪴" else "📡",
-                fontSize = 20.sp
-            )
+            Text(text = if (device.isSap) "🪴" else "📡", fontSize = 20.sp)
         }
 
         Spacer(Modifier.width(12.dp))
@@ -502,8 +524,7 @@ private fun DeviceItem(
                 Text(
                     text       = device.name,
                     style      = MaterialTheme.typography.bodyMedium,
-                    color      = if (isSelected) Green100
-                    else MaterialTheme.colorScheme.onSurface,
+                    color      = if (isSelected) Green100 else MaterialTheme.colorScheme.onSurface,
                     fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal
                 )
                 if (device.isSap) {
@@ -515,9 +536,9 @@ private fun DeviceItem(
                             .padding(horizontal = 5.dp, vertical = 1.dp)
                     ) {
                         Text(
-                            text  = "Sap",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Orange400,
+                            text     = "Sap",
+                            style    = MaterialTheme.typography.labelSmall,
+                            color    = Orange400,
                             fontSize = 9.sp
                         )
                     }
@@ -530,8 +551,15 @@ private fun DeviceItem(
             )
         }
 
-        // Barres de signal
-        SignalBars(bars = device.signalBars, isSelected = isSelected)
+        if (isConnecting) {
+            CircularProgressIndicator(
+                modifier    = Modifier.size(18.dp),
+                color       = Green400,
+                strokeWidth = 2.dp
+            )
+        } else {
+            SignalBars(bars = device.signalBars, isSelected = isSelected)
+        }
     }
 }
 
@@ -583,65 +611,6 @@ private fun EmptyDevicesMessage(onRetry: () -> Unit, modifier: Modifier = Modifi
         Spacer(Modifier.height(12.dp))
         TextButton(onClick = onRetry) {
             Text(stringResource(R.string.btn_retry), color = Green400)
-        }
-    }
-}
-
-// ─────────────────────────────────────────────────────────────────────
-// Bouton appairer
-// ─────────────────────────────────────────────────────────────────────
-@Composable
-private fun PairButton(
-    device: BleDevice?,
-    connectionState: ConnectionState,
-    onPair: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val isConnecting = connectionState is ConnectionState.Connecting
-
-    Button(
-        onClick  = onPair,
-        enabled  = !isConnecting && device != null,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(54.dp),
-        shape    = RoundedCornerShape(16.dp),
-        colors   = ButtonDefaults.buttonColors(
-            containerColor         = Green800,
-            contentColor           = Color.White,
-            disabledContainerColor = Green800.copy(alpha = 0.5f)
-        ),
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
-    ) {
-        AnimatedContent(
-            targetState = isConnecting,
-            transitionSpec = { fadeIn() togetherWith fadeOut() },
-            label = "pair_btn"
-        ) { connecting ->
-            if (connecting) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    CircularProgressIndicator(
-                        modifier    = Modifier.size(18.dp),
-                        color       = Color.White,
-                        strokeWidth = 2.dp
-                    )
-                    Spacer(Modifier.width(10.dp))
-                    Text(stringResource(R.string.connecting))
-                }
-            } else {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        Icons.Default.BluetoothConnected,
-                        contentDescription = null,
-                        modifier = Modifier.size(18.dp)
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    Text(
-                        text = device?.let { stringResource(R.string.pair_device, it.name.take(20)) }
-                            ?: stringResource(R.string.pair_no_device)
-                    )
-                }
-            }
         }
     }
 }
