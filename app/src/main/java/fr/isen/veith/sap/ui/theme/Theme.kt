@@ -5,7 +5,9 @@ import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
@@ -109,6 +111,8 @@ private val LightColorScheme = lightColorScheme(
     error            = Color(0xFFB3261E)
 )
 
+val LocalSapDarkTheme = compositionLocalOf { false }
+
 @Composable
 fun SapTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -126,9 +130,11 @@ fun SapTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography  = SapTypography,
-        content     = content
-    )
+    CompositionLocalProvider(LocalSapDarkTheme provides darkTheme) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography  = SapTypography,
+            content     = content
+        )
+    }
 }

@@ -5,13 +5,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.compose.foundation.isSystemInDarkTheme
 import fr.isen.veith.sap.data.preferences.LocaleHelper
 import androidx.compose.animation.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
+import fr.isen.veith.sap.data.preferences.AppTheme
+import fr.isen.veith.sap.ui.MainViewModel
 import fr.isen.veith.sap.ui.auth.AuthScreen
 import fr.isen.veith.sap.ui.home.HomeScreen
 import fr.isen.veith.sap.ui.pairing.PairingScreen
@@ -29,6 +35,8 @@ object Routes {
 }
 
 class MainActivity : ComponentActivity() {
+    private val mainViewModel: MainViewModel by viewModels()
+
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(LocaleHelper.applyLocale(newBase))
     }
@@ -37,7 +45,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            SapTheme {
+            val theme by mainViewModel.theme.collectAsStateWithLifecycle()
+            val darkTheme = when (theme) {
+                AppTheme.LIGHT  -> false
+                AppTheme.DARK   -> true
+                AppTheme.SYSTEM -> isSystemInDarkTheme()
+            }
+            SapTheme(darkTheme = darkTheme) {
                 SapApp()
             }
         }

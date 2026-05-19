@@ -166,15 +166,17 @@ private fun HomeHeader(
         else      -> stringResource(R.string.greeting_evening)
     }
 
+    val isDark = LocalSapDarkTheme.current
+    val headerColors = if (isDark)
+        listOf(Green900, Color(0xFF2A5A2A))
+    else
+        listOf(Green800, Green600)
+
     Box {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(Green900, Color(0xFF2A5A2A))
-                    )
-                )
+                .background(Brush.verticalGradient(colors = headerColors))
                 .padding(top = 20.dp, bottom = 24.dp, start = 20.dp, end = 20.dp)
         ) {
             // Ligne supérieure : greeting + bouton settings
@@ -191,7 +193,7 @@ private fun HomeHeader(
                     Text(
                         text  = stringResource(R.string.home_subtitle),
                         style = MaterialTheme.typography.labelSmall,
-                        color = Green400.copy(alpha = 0.6f)
+                        color = Green100.copy(alpha = 0.6f)
                     )
                 }
                 IconButton(onClick = onSettings) {

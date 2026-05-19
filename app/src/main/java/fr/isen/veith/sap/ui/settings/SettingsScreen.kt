@@ -163,14 +163,16 @@ private fun ProfileHeader(
 ) {
     var editMode by remember { mutableStateOf(false) }
 
+    val isDark = LocalSapDarkTheme.current
+    val headerColors = if (isDark)
+        listOf(Green900, Color(0xFF253D25))
+    else
+        listOf(Green800, Green600)
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(Green900, Color(0xFF253D25))
-                )
-            )
+            .background(Brush.verticalGradient(colors = headerColors))
     ) {
         Column(
             modifier = Modifier
