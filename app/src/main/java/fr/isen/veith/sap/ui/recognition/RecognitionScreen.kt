@@ -53,6 +53,7 @@ import kotlin.math.roundToInt
  */
 @Composable
 fun RecognitionScreen(
+    potId: String = "",
     onPlantSaved: () -> Unit = {},
     onBack: () -> Unit = {},
     viewModel: RecognitionViewModel = viewModel()
@@ -105,7 +106,7 @@ fun RecognitionScreen(
                 onSelectResult      = viewModel::selectResult,
                 onRetry             = viewModel::retryIdentification,
                 onRetake            = viewModel::resetCapture,
-                onSave              = viewModel::savePlant,
+                onSave              = { viewModel.savePlant(potId) },
                 onBack              = onBack
             )
         }

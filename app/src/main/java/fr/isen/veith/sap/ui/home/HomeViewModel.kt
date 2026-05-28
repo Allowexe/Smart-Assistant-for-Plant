@@ -1,13 +1,13 @@
 package fr.isen.veith.sap.ui.home
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import fr.isen.veith.sap.data.influxdb.InfluxRepository
+import fr.isen.veith.sap.data.preferences.AppPreferencesRepository
 import fr.isen.veith.sap.domain.model.Plant
 import fr.isen.veith.sap.domain.model.PlantMood
 import fr.isen.veith.sap.domain.model.SampleData
-import fr.isen.veith.sap.data.ble.BleManager
-import fr.isen.veith.sap.data.ble.ConnectionState
 import fr.isen.veith.sap.domain.model.SensorData
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -19,24 +19,24 @@ import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 data class HomeUiState(
-    val userName: String              = "Jardinier",
-    val plants: List<Plant>           = SampleData.plants,
-    val selectedPlant: Plant          = SampleData.plants.first(),
-    val sensorData: SensorData        = SampleData.sensorData,
-    val mood: PlantMood               = PlantMood.HAPPY,
-    val isPlantMenuOpen: Boolean      = false,
-    val healthScore: Float            = 78f,
-    // Pot selector (InfluxDB)
-    val availablePotIds: List<String> = emptyList(),
-    val selectedPotId: String         = "",
-    val isPotMenuOpen: Boolean        = false,
-    val isInfluxLoading: Boolean      = false,
-    val influxError: String?          = null
-)
+    val userName: String                    = "Jardinier",
+    val plantsPerPot: Map<String, Plant>    = emptyMap(),
+    val sensorData: SensorData              = SampleData.sensorData,
+    val mood: PlantMood                     = PlantMood.HAPPY,
+    val healthScore: Float                  = 0f,
+    val availablePotIds: List<String>       = emptyList(),
+    val selectedPotId: String               = "",
+    val isPotMenuOpen: Boolean              = false,
+    val isInfluxLoading: Boolean            = false,
+    val influxError: String?                = null
+) {
+    val activePlant: Plant? get() = plantsPerPot[selectedPotId]
+}
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
     private val influx = InfluxRepository()
+    private val prefs  = AppPreferencesRepository(app)
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -44,6 +44,23 @@ class HomeViewModel : ViewModel() {
     private var refreshJob: Job? = null
 
     init {
+        // Sync plants map + username from DataStore
+        viewModelScope.launch {
+            prefs.preferences.collect { p ->
+                _uiState.update { state ->
+                    val plant = p.savedPlants[state.selectedPotId]
+                    state.copy(
+                        userName     = p.username.ifBlank { "Jardinier" },
+                        plantsPerPot = p.savedPlants,
+                        mood         = if (plant != null) PlantMood.from(state.sensorData, plant)
+                                       else PlantMood.HAPPY,
+                        healthScore  = if (plant != null) computeHealth(state.sensorData, plant)
+                                       else 0f
+                    )
+                }
+            }
+        }
+
         // Load available pots from InfluxDB, then start refresh loop
         viewModelScope.launch {
             try {
@@ -53,49 +70,26 @@ class HomeViewModel : ViewModel() {
                     startRefreshing()
                 }
             } catch (_: Exception) {
-                // No InfluxDB connection — fall back to simulated data
                 startSimulation()
-            }
-        }
-
-        // Mirror live BLE sensor data if connected
-        viewModelScope.launch {
-            BleManager.sensorData.collect { bleData ->
-                if (bleData != null) {
-                    _uiState.update { state ->
-                        state.copy(
-                            sensorData  = bleData,
-                            mood        = PlantMood.from(bleData, state.selectedPlant),
-                            healthScore = computeHealth(bleData, state.selectedPlant)
-                        )
-                    }
-                }
             }
         }
     }
 
     fun selectPotId(id: String) {
-        _uiState.update { it.copy(selectedPotId = id, isPotMenuOpen = false) }
+        _uiState.update { state ->
+            val plant = state.plantsPerPot[id]
+            state.copy(
+                selectedPotId = id,
+                isPotMenuOpen = false,
+                mood          = if (plant != null) PlantMood.from(state.sensorData, plant) else PlantMood.HAPPY,
+                healthScore   = if (plant != null) computeHealth(state.sensorData, plant) else 0f
+            )
+        }
         startRefreshing()
     }
 
     fun togglePotMenu()  = _uiState.update { it.copy(isPotMenuOpen = !it.isPotMenuOpen) }
     fun closePotMenu()   = _uiState.update { it.copy(isPotMenuOpen = false) }
-
-    fun selectPlant(plant: Plant) {
-        _uiState.update {
-            it.copy(
-                selectedPlant   = plant,
-                isPlantMenuOpen = false,
-                mood            = PlantMood.from(it.sensorData, plant),
-                healthScore     = computeHealth(it.sensorData, plant)
-            )
-        }
-    }
-
-    fun togglePlantMenu() = _uiState.update { it.copy(isPlantMenuOpen = !it.isPlantMenuOpen) }
-    fun closePlantMenu()  = _uiState.update { it.copy(isPlantMenuOpen = false) }
-    fun setUserName(name: String) = _uiState.update { it.copy(userName = name) }
 
     private fun startRefreshing() {
         refreshJob?.cancel()
@@ -120,10 +114,11 @@ class HomeViewModel : ViewModel() {
                 luminosity  = spectrum.luminosity
             )
             _uiState.update { state ->
+                val plant = state.activePlant
                 state.copy(
                     sensorData      = data,
-                    mood            = PlantMood.from(data, state.selectedPlant),
-                    healthScore     = computeHealth(data, state.selectedPlant),
+                    mood            = if (plant != null) PlantMood.from(data, plant) else PlantMood.HAPPY,
+                    healthScore     = if (plant != null) computeHealth(data, plant) else 0f,
                     isInfluxLoading = false,
                     influxError     = null
                 )
@@ -143,10 +138,11 @@ class HomeViewModel : ViewModel() {
                         luminosity  = (state.sensorData.luminosity + (-200..200).randomInt()).coerceAtLeast(0f),
                         temperature = state.sensorData.temperature + (-0.5f..0.5f).randomFloat()
                     )
+                    val plant = state.activePlant
                     state.copy(
                         sensorData  = d,
-                        mood        = PlantMood.from(d, state.selectedPlant),
-                        healthScore = computeHealth(d, state.selectedPlant)
+                        mood        = if (plant != null) PlantMood.from(d, plant) else PlantMood.HAPPY,
+                        healthScore = if (plant != null) computeHealth(d, plant) else 0f
                     )
                 }
             }
@@ -164,6 +160,6 @@ class HomeViewModel : ViewModel() {
         return score.coerceIn(0f, 100f)
     }
 
-    private fun ClosedRange<Int>.randomInt() = (start + Math.random() * (endInclusive - start)).toInt().toFloat()
+    private fun ClosedRange<Int>.randomInt()   = (start + Math.random() * (endInclusive - start)).toInt().toFloat()
     private fun ClosedRange<Float>.randomFloat() = start + (Math.random() * (endInclusive - start)).toFloat()
 }

@@ -12,9 +12,11 @@ import androidx.compose.animation.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 import fr.isen.veith.sap.data.preferences.AppTheme
 import fr.isen.veith.sap.ui.MainViewModel
@@ -112,7 +114,9 @@ fun SapApp() {
                 onNavigateToSettings    = { navController.navigate(Routes.SETTINGS) },
                 onNavigateToScan        = { navController.navigate(Routes.SCAN) },
                 onNavigateToDashboard   = { navController.navigate(Routes.DASHBOARD) },
-                onNavigateToRecognition = { navController.navigate(Routes.RECOGNITION) }
+                onNavigateToRecognition = { potId ->
+                    navController.navigate("${Routes.RECOGNITION}/$potId")
+                }
             )
         }
         composable(Routes.SETTINGS) {
@@ -131,8 +135,15 @@ fun SapApp() {
                 onBack   = { navController.popBackStack() }
             )
         }
-        composable(Routes.RECOGNITION) {
+        composable(
+            route     = "${Routes.RECOGNITION}/{potId}",
+            arguments = listOf(navArgument("potId") {
+                type         = NavType.StringType
+                defaultValue = ""
+            })
+        ) { backStackEntry ->
             RecognitionScreen(
+                potId        = backStackEntry.arguments?.getString("potId") ?: "",
                 onPlantSaved = {
                     navController.navigate(Routes.HOME) {
                         popUpTo(Routes.HOME) { inclusive = false }

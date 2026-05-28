@@ -14,6 +14,7 @@ import androidx.lifecycle.viewModelScope
 import fr.isen.veith.sap.data.api.IdentificationResult
 import fr.isen.veith.sap.data.api.IdentificationState
 import fr.isen.veith.sap.data.api.PlantNetRepository
+import fr.isen.veith.sap.data.preferences.AppPreferencesRepository
 import fr.isen.veith.sap.domain.model.Plant
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -141,15 +142,15 @@ class RecognitionViewModel(application: Application) : AndroidViewModel(applicat
         _uiState.update { it.copy(selectedResultIndex = index) }
     }
 
-    // ── Sauvegarder la plante identifiée ──────────────────────────────
-    fun savePlant() {
+    // ── Sauvegarder la plante identifiée (associée au potId commissioning) ─
+    fun savePlant(potId: String) {
         val state = _uiState.value
         val results = (state.identificationState as? IdentificationState.Success)
             ?.results ?: return
         val selected = results.getOrNull(state.selectedResultIndex) ?: return
 
         viewModelScope.launch {
-            // TODO: sauvegarder dans Room DB
+            AppPreferencesRepository(getApplication()).savePlant(potId, selected.plant)
             _uiState.update {
                 it.copy(
                     savedPlant      = selected.plant,
