@@ -46,6 +46,23 @@
     <string name="btn_identify_plant">Identify a plant</string>
     <string name="btn_pair_pot">Pair a pot</string>
 
+    <string name="achievement_first_pot_title">First pot</string>
+    <string name="achievement_first_pot_desc">Pair your first connected pot</string>
+    <string name="achievement_botanist_title">Botanist</string>
+    <string name="achievement_botanist_desc">Identify your first plant</string>
+    <string name="achievement_watering_title">Faithful waterer</string>
+    <string name="achievement_watering_desc">Water your plant 7 days in a row</string>
+    <string name="achievement_sunshine_title">Light chaser</string>
+    <string name="achievement_sunshine_desc">Maintain optimal sunlight for 5 days</string>
+    <string name="achievement_collection_title">Collector</string>
+    <string name="achievement_collection_desc">Identify 5 different plants</string>
+    <string name="achievement_green_thumb_title">Green thumb</string>
+    <string name="achievement_green_thumb_desc">Maintain health &gt; 90% for 30 days</string>
+    <string name="achievement_temperature_title">Thermometer</string>
+    <string name="achievement_temperature_desc">Keep the ideal temperature for 14 days</string>
+    <string name="achievement_multi_pot_title">Connected garden</string>
+    <string name="achievement_multi_pot_desc">Pair 3 or more pots</string>
+
     <string name="settings_prefs_section">Preferences</string>
     <string name="settings_language">Language</string>
     <string name="settings_theme">Theme</string>

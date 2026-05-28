@@ -1,5 +1,6 @@
 [versions]
 agp = "9.2.1"
+okhttp = "5.3.2"
 firebaseBom = "34.13.0"
 googleServices = "4.4.4"
 ble = "2.11.0"
@@ -43,6 +44,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx"
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 ble = { module = "no.nordicsemi.android:ble", version.ref = "ble" }
 ble-ktx = { module = "no.nordicsemi.android:ble-ktx", version.ref = "bleKtx" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }

@@ -65,7 +65,7 @@ class BleScanner(context: Context) {
                 address    = result.device.address,
                 name       = result.device.name ?: "Inconnu-${result.device.address.takeLast(4)}",
                 rssi       = result.rssi,
-                isSap = result.device.name?.contains("Sap", ignoreCase = true) == true
+                isSap = result.device.name?.startsWith("ST67W61_BLE_") == true
             )
             _devices.value = (_devices.value
                 .filter { it.address != device.address } + device)

@@ -19,18 +19,22 @@ import com.google.firebase.auth.FirebaseAuth
 import fr.isen.veith.sap.data.preferences.AppTheme
 import fr.isen.veith.sap.ui.MainViewModel
 import fr.isen.veith.sap.ui.auth.AuthScreen
+import fr.isen.veith.sap.ui.dashboard.DashboardScreen
 import fr.isen.veith.sap.ui.home.HomeScreen
 import fr.isen.veith.sap.ui.pairing.PairingScreen
 import fr.isen.veith.sap.ui.recognition.RecognitionScreen
+import fr.isen.veith.sap.ui.scan.ScanScreen
 import fr.isen.veith.sap.ui.settings.SettingsScreen
 import fr.isen.veith.sap.ui.theme.SapTheme
 
 // ── Destinations de navigation ────────────────────────────────────────
 object Routes {
-    const val AUTH   = "auth"
-    const val HOME   = "home"
-    const val SETTINGS  = "settings"
-    const val PAIRING   = "pairing"
+    const val AUTH        = "auth"
+    const val HOME        = "home"        // legacy BLE home
+    const val DASHBOARD   = "dashboard"   // InfluxDB dashboard (main)
+    const val SCAN        = "scan"        // BLE commissioning
+    const val SETTINGS    = "settings"
+    const val PAIRING     = "pairing"     // legacy BLE pairing
     const val RECOGNITION = "recognition"
 }
 
@@ -75,7 +79,7 @@ fun SapApp() {
         // ── Auth ─────────────────────────────────────────────────
         composable(Routes.AUTH) {
             AuthScreen(
-                onAuthSuccess = { user ->
+                onAuthSuccess = { _ ->
                     navController.navigate(Routes.HOME) {
                         popUpTo(Routes.AUTH) { inclusive = true }
                     }
@@ -83,11 +87,31 @@ fun SapApp() {
             )
         }
 
-        // ── Home ───────────
+        // ── Dashboard (main) ──────────────────────────────────────
+        composable(Routes.DASHBOARD) {
+            DashboardScreen(
+                onNavigateToScan = { navController.navigate(Routes.SCAN) }
+            )
+        }
+
+        // ── BLE Scan / Commissioning ──────────────────────────────
+        composable(Routes.SCAN) {
+            ScanScreen(
+                onDone = {
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.HOME) { inclusive = false }
+                    }
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        // ── Home (main) ───────────────────────────────────────────
         composable(Routes.HOME) {
             HomeScreen(
                 onNavigateToSettings    = { navController.navigate(Routes.SETTINGS) },
-                onNavigateToPairing     = { navController.navigate(Routes.PAIRING) },
+                onNavigateToScan        = { navController.navigate(Routes.SCAN) },
+                onNavigateToDashboard   = { navController.navigate(Routes.DASHBOARD) },
                 onNavigateToRecognition = { navController.navigate(Routes.RECOGNITION) }
             )
         }

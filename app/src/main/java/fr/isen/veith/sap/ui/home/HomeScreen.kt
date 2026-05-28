@@ -9,9 +9,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Bluetooth
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Sensors
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.WindowInsets
@@ -37,13 +39,14 @@ import fr.isen.veith.sap.ui.theme.*
  * Écran d'accueil Sap.
  *
  * @param onNavigateToSettings    Vers l'écran réglages
- * @param onNavigateToPairing     Vers l'écran d'appairage BLE
+ * @param onNavigateToScan        Vers l'écran de commissioning BLE
  * @param onNavigateToRecognition Vers l'écran de reconnaissance de plante
  */
 @Composable
 fun HomeScreen(
     onNavigateToSettings: () -> Unit,
-    onNavigateToPairing: () -> Unit,
+    onNavigateToScan: () -> Unit,
+    onNavigateToDashboard: () -> Unit,
     onNavigateToRecognition: () -> Unit,
     viewModel: HomeViewModel = viewModel()
 ) {
@@ -62,17 +65,25 @@ fun HomeScreen(
         ) {
             // ── Header vert foncé avec visage + météo plante ──────────
             HomeHeader(
-                userName      = state.userName,
-                mood          = state.mood,
-                plantName     = state.selectedPlant.commonName,
-                plantEmoji    = state.selectedPlant.emoji,
-                plants        = state.plants,
-                selectedPlant = state.selectedPlant,
-                isMenuOpen    = state.isPlantMenuOpen,
-                onToggleMenu  = viewModel::togglePlantMenu,
-                onSelectPlant = viewModel::selectPlant,
-                onDismissMenu = viewModel::closePlantMenu,
-                onSettings    = onNavigateToSettings
+                userName         = state.userName,
+                mood             = state.mood,
+                plantName        = state.selectedPlant.commonName,
+                plantEmoji       = state.selectedPlant.emoji,
+                plants           = state.plants,
+                selectedPlant    = state.selectedPlant,
+                isMenuOpen       = state.isPlantMenuOpen,
+                onToggleMenu     = viewModel::togglePlantMenu,
+                onSelectPlant    = viewModel::selectPlant,
+                onDismissMenu    = viewModel::closePlantMenu,
+                availablePotIds  = state.availablePotIds,
+                selectedPotId    = state.selectedPotId,
+                isPotMenuOpen    = state.isPotMenuOpen,
+                onTogglePotMenu  = viewModel::togglePotMenu,
+                onSelectPotId    = viewModel::selectPotId,
+                onDismissPotMenu = viewModel::closePotMenu,
+                isInfluxLoading  = state.isInfluxLoading,
+                onSettings       = onNavigateToSettings,
+                onDashboard      = onNavigateToDashboard
             )
 
             Spacer(Modifier.height(16.dp))
@@ -114,7 +125,7 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 PairingButton(
-                    onClick  = onNavigateToPairing,
+                    onClick  = onNavigateToScan,
                     modifier = Modifier.weight(1f)
                 )
                 RecognitionButton(
@@ -128,15 +139,15 @@ fun HomeScreen(
 
         // Fermer le menu en tapant en dehors — uniquement la zone SOUS le header
         // (ne pas intercepter les clics sur le menu lui-même)
-        if (state.isPlantMenuOpen) {
+        if (state.isPlantMenuOpen || state.isPotMenuOpen) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 160.dp)   // laisser libre la zone du header + menu
+                    .padding(top = 160.dp)
                     .clickable(
-                        indication         = null,
-                        interactionSource  = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
-                        onClick            = viewModel::closePlantMenu
+                        indication        = null,
+                        interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
+                        onClick           = { viewModel.closePlantMenu(); viewModel.closePotMenu() }
                     )
             )
         }
@@ -158,7 +169,15 @@ private fun HomeHeader(
     onToggleMenu: () -> Unit,
     onSelectPlant: (fr.isen.veith.sap.domain.model.Plant) -> Unit,
     onDismissMenu: () -> Unit,
-    onSettings: () -> Unit
+    availablePotIds: List<String>,
+    selectedPotId: String,
+    isPotMenuOpen: Boolean,
+    onTogglePotMenu: () -> Unit,
+    onSelectPotId: (String) -> Unit,
+    onDismissPotMenu: () -> Unit,
+    isInfluxLoading: Boolean,
+    onSettings: () -> Unit,
+    onDashboard: () -> Unit
 ) {
     val greeting = when (java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)) {
         in 5..11  -> stringResource(R.string.greeting_morning)
@@ -179,7 +198,7 @@ private fun HomeHeader(
                 .background(Brush.verticalGradient(colors = headerColors))
                 .padding(top = 20.dp, bottom = 24.dp, start = 20.dp, end = 20.dp)
         ) {
-            // Ligne supérieure : greeting + bouton settings
+            // Ligne supérieure : greeting + boutons settings/dashboard
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -196,12 +215,87 @@ private fun HomeHeader(
                         color = Green100.copy(alpha = 0.6f)
                     )
                 }
+                IconButton(onClick = onDashboard) {
+                    Icon(
+                        imageVector        = Icons.Default.BarChart,
+                        contentDescription = "Voir le dashboard",
+                        tint               = Green200.copy(alpha = 0.7f)
+                    )
+                }
                 IconButton(onClick = onSettings) {
                     Icon(
                         imageVector        = Icons.Default.Settings,
                         contentDescription = stringResource(R.string.cd_settings),
                         tint               = Green200.copy(alpha = 0.7f)
                     )
+                }
+            }
+
+            // Sélecteur de pot InfluxDB (visible si plusieurs pots disponibles)
+            if (availablePotIds.isNotEmpty()) {
+                Spacer(Modifier.height(8.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector        = Icons.Default.Sensors,
+                        contentDescription = null,
+                        tint               = Green400.copy(alpha = 0.7f),
+                        modifier           = Modifier.size(14.dp)
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        text  = "Pot : ",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Green400.copy(alpha = 0.65f)
+                    )
+                    if (availablePotIds.size == 1) {
+                        Text(
+                            text  = selectedPotId,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = Green200
+                        )
+                    } else {
+                        Row(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .clickable(onClick = onTogglePotMenu)
+                                .padding(horizontal = 4.dp, vertical = 2.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text  = selectedPotId,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Green200
+                            )
+                            Icon(
+                                imageVector        = Icons.Default.KeyboardArrowDown,
+                                contentDescription = null,
+                                tint               = Orange200,
+                                modifier           = Modifier.size(14.dp)
+                            )
+                        }
+                        DropdownMenu(
+                            expanded        = isPotMenuOpen,
+                            onDismissRequest = onDismissPotMenu
+                        ) {
+                            availablePotIds.forEach { id ->
+                                DropdownMenuItem(
+                                    text    = { Text(id) },
+                                    onClick = { onSelectPotId(id) },
+                                    leadingIcon = if (id == selectedPotId) ({
+                                        Icon(Icons.Default.Sensors, contentDescription = null, modifier = Modifier.size(16.dp))
+                                    }) else null
+                                )
+                            }
+                        }
+                    }
+                    if (isInfluxLoading) {
+                        Spacer(Modifier.width(8.dp))
+                        CircularProgressIndicator(
+                            modifier  = Modifier.size(10.dp),
+                            strokeWidth = 1.5.dp,
+                            color     = Green400.copy(alpha = 0.6f)
+                        )
+                    }
                 }
             }
 

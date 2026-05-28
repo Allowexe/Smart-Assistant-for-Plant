@@ -627,7 +627,7 @@ private fun AchievementCard(
         Spacer(Modifier.height(8.dp))
 
         Text(
-            text      = achievement.title,
+            text      = stringResource(achievement.titleRes),
             style     = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Medium,
             color      = if (achievement.isUnlocked) Green100
@@ -638,7 +638,7 @@ private fun AchievementCard(
         Spacer(Modifier.height(2.dp))
 
         Text(
-            text    = achievement.description,
+            text    = stringResource(achievement.descriptionRes),
             style   = MaterialTheme.typography.labelSmall,
             color   = MaterialTheme.colorScheme.onSurface.copy(alpha = if (achievement.isUnlocked) 0.55f else 0.3f),
             maxLines = 2,
