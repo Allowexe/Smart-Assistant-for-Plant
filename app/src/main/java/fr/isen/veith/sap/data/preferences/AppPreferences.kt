@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import fr.isen.veith.sap.data.plant.PlantDatabase
 import fr.isen.veith.sap.domain.model.Plant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -65,12 +66,20 @@ class AppPreferencesRepository(private val context: Context) {
                 ?: emptyList()
 
             val plants = potIds.associateWith { potId ->
-                Plant(
+                val basic = Plant(
                     id             = prefs[Keys.plantId(potId)]     ?: potId,
                     commonName     = prefs[Keys.plantCommon(potId)] ?: potId,
                     scientificName = prefs[Keys.plantSci(potId)]    ?: potId,
                     emoji          = prefs[Keys.plantEmoji(potId)]  ?: "🌱"
                 )
+                // Re-enrich thresholds from DB on every load
+                PlantDatabase.findBestMatch(basic.scientificName, basic.commonName)
+                    ?.copy(
+                        id             = basic.id,
+                        commonName     = basic.commonName,
+                        scientificName = basic.scientificName,
+                        emoji          = basic.emoji
+                    ) ?: basic
             }
 
             UserPreferences(

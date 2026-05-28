@@ -40,6 +40,7 @@ data class Plant(
     val humidityMin: Float      = 40f,
     val humidityMax: Float      = 70f,
     val luxMin: Float           = 2000f,
+    val luxMax: Float           = 50000f,
     val tempMin: Float          = 15f,
     val tempMax: Float          = 28f,
     val wateringTip: String     = "Arrosez quand le sol est sec en surface.",

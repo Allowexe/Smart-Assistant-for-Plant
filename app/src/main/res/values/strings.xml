@@ -46,6 +46,7 @@
     <string name="tip_too_dry">Sol trop sec — il est temps d\'arroser !</string>
     <string name="tip_too_wet">Sol trop humide — attends avant d\'arroser.</string>
     <string name="tip_low_light">Manque de lumière — rapproche du fenêtre.</string>
+    <string name="tip_too_bright">Trop de lumière — éloigne du soleil direct.</string>
     <string name="tip_too_cold">Trop froid — éloigne des courants d\'air.</string>
     <string name="tip_too_hot">Trop chaud — aère la pièce.</string>
 

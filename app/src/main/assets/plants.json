@@ -1,0 +1,1612 @@
+[
+  {
+    "nom": "Haworthia fasciata (Plante zèbre)",
+    "t_air": {"min": 12, "max": 30},
+    "t_sol": {"min": 12, "max": 25},
+    "hum_sol": {"min": 15, "max": 35},
+    "lux": {"min": 2000, "max": 7000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Haworthia cooperi (Succulente transparente)",
+    "t_air": {"min": 15, "max": 28},
+    "t_sol": {"min": 15, "max": 24},
+    "hum_sol": {"min": 20, "max": 40},
+    "lux": {"min": 1500, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Haworthia limifolia (Plante planche à laver)",
+    "t_air": {"min": 12, "max": 30},
+    "t_sol": {"min": 12, "max": 25},
+    "hum_sol": {"min": 15, "max": 35},
+    "lux": {"min": 2000, "max": 7000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Echeveria elegans (Rose du désert)",
+    "t_air": {"min": 12, "max": 35},
+    "t_sol": {"min": 12, "max": 30},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 15000, "max": 45000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Echeveria agavoides (Faux agave)",
+    "t_air": {"min": 12, "max": 38},
+    "t_sol": {"min": 12, "max": 32},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 15000, "max": 50000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Echeveria Perle von Nürnberg",
+    "t_air": {"min": 15, "max": 35},
+    "t_sol": {"min": 15, "max": 30},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 15000, "max": 45000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Crassula ovata Hobbit (Oreille de Shrek)",
+    "t_air": {"min": 10, "max": 32},
+    "t_sol": {"min": 12, "max": 28},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 10000, "max": 30000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Crassula pyramidalis (Pagode de Jade)",
+    "t_air": {"min": 12, "max": 30},
+    "t_sol": {"min": 12, "max": 25},
+    "hum_sol": {"min": 15, "max": 35},
+    "lux": {"min": 8000, "max": 25000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Crassula rupestris (Collier de Jade)",
+    "t_air": {"min": 10, "max": 30},
+    "t_sol": {"min": 12, "max": 25},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 8000, "max": 25000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Sedum morganianum (Queue d'âne)",
+    "t_air": {"min": 10, "max": 28},
+    "t_sol": {"min": 12, "max": 24},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 10000, "max": 30000},
+    "pression_ref": 1013
+  },
+
+  {
+    "nom": "Sedum rubrotinctum (Plante bonbon)",
+    "t_air": {"min": 10, "max": 35},
+    "t_sol": {"min": 12, "max": 28},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 15000, "max": 45000},
+    "pression_ref": 1013
+  },
+
+  {
+    "nom": "Aloe aristata (Aloès dentelle)",
+    "t_air": {"min": 12, "max": 30},
+    "t_sol": {"min": 14, "max": 25},
+    "hum_sol": {"min": 15, "max": 35},
+    "lux": {"min": 5000, "max": 15000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Aloe Christmas Carol",
+    "t_air": {"min": 15, "max": 35},
+    "t_sol": {"min": 16, "max": 28},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 8000, "max": 25000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Gasteria Little Warty (Langue de bœuf)",
+    "t_air": {"min": 12, "max": 28},
+    "t_sol": {"min": 14, "max": 24},
+    "hum_sol": {"min": 20, "max": 40},
+    "lux": {"min": 1000, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Kalanchoe tomentosa (Plante panda)",
+    "t_air": {"min": 15, "max": 30},
+    "t_sol": {"min": 16, "max": 25},
+    "hum_sol": {"min": 15, "max": 35},
+    "lux": {"min": 5000, "max": 15000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Kalanchoe thyrsiflora (Plante à oreillettes)",
+    "t_air": {"min": 15, "max": 35},
+    "t_sol": {"min": 15, "max": 30},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 10000, "max": 35000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Adromischus cristatus (Plante ravioli)",
+    "t_air": {"min": 12, "max": 28},
+    "t_sol": {"min": 14, "max": 24},
+    "hum_sol": {"min": 15, "max": 35},
+    "lux": {"min": 5000, "max": 15000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Pachyphytum oviferum (Pierre de lune)",
+    "t_air": {"min": 12, "max": 30},
+    "t_sol": {"min": 14, "max": 25},
+    "hum_sol": {"min": 5, "max": 25},
+    "lux": {"min": 10000, "max": 30000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Cotyledon tomentosa (Patte d'ours)",
+    "t_air": {"min": 15, "max": 30},
+    "t_sol": {"min": 16, "max": 26},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 5000, "max": 15000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Lithops (Plante caillou)",
+    "t_air": {"min": 15, "max": 35},
+    "t_sol": {"min": 15, "max": 30},
+    "hum_sol": {"min": 5, "max": 20},
+    "lux": {"min": 15000, "max": 50000},
+    "pression_ref": 1013
+  },
+
+  {
+    "nom": "Fenestraria rhopalophylla (Orteils de bébé)",
+    "t_air": {"min": 10, "max": 30},
+    "t_sol": {"min": 12, "max": 26},
+    "hum_sol": {"min": 5, "max": 20},
+    "lux": {"min": 15000, "max": 45000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Titanopsis calcarea",
+    "t_air": {"min": 8, "max": 32},
+    "t_sol": {"min": 10, "max": 28},
+    "hum_sol": {"min": 5, "max": 20},
+    "lux": {"min": 15000, "max": 50000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Faucaria tigrina (Gueule de tigre)",
+    "t_air": {"min": 10, "max": 35},
+    "t_sol": {"min": 12, "max": 30},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 10000, "max": 40000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Portulacaria afra (Arbre à éléphant nain)",
+    "t_air": {"min": 12, "max": 40},
+    "t_sol": {"min": 14, "max": 32},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 8000, "max": 30000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Senecio haworthii (Plante cocon)",
+    "t_air": {"min": 12, "max": 30},
+    "t_sol": {"min": 14, "max": 26},
+    "hum_sol": {"min": 5, "max": 25},
+    "lux": {"min": 10000, "max": 35000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Mammillaria gracilis (Cactus dé à coudre)",
+    "t_air": {"min": 8, "max": 40},
+    "t_sol": {"min": 10, "max": 35},
+    "hum_sol": {"min": 5, "max": 20},
+    "lux": {"min": 20000, "max": 60000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Mammillaria elongata (Cactus doigts de dame)",
+    "t_air": {"min": 8, "max": 40},
+    "t_sol": {"min": 10, "max": 35},
+    "hum_sol": {"min": 5, "max": 20},
+    "lux": {"min": 20000, "max": 60000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Echinocactus grusonii (Coussin de belle-mère)",
+    "t_air": {"min": 10, "max": 45},
+    "t_sol": {"min": 12, "max": 38},
+    "hum_sol": {"min": 5, "max": 20},
+    "lux": {"min": 25000, "max": 70000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Opuntia microdasys (Oreilles de Mickey)",
+    "t_air": {"min": 10, "max": 40},
+    "t_sol": {"min": 12, "max": 35},
+    "hum_sol": {"min": 5, "max": 25},
+    "lux": {"min": 20000, "max": 60000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Cereus peruvianus Paolina",
+    "t_air": {"min": 12, "max": 38},
+    "t_sol": {"min": 14, "max": 32},
+    "hum_sol": {"min": 5, "max": 25},
+    "lux": {"min": 15000, "max": 50000},
+    "pression_ref": 1013
+  },
+
+  {
+    "nom": "Astrophytum asterias (Cactus oursin)",
+    "t_air": {"min": 10, "max": 35},
+    "t_sol": {"min": 12, "max": 28},
+    "hum_sol": {"min": 5, "max": 20},
+    "lux": {"min": 15000, "max": 45000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Gymnocalycium mihanovichii (Cactus lune greffé)",
+    "t_air": {"min": 15, "max": 30},
+    "t_sol": {"min": 15, "max": 25},
+    "hum_sol": {"min": 20, "max": 45},
+    "lux": {"min": 5000, "max": 15000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Rhipsalis baccifera (Cactus spaghetti)",
+    "t_air": {"min": 18, "max": 28},
+    "t_sol": {"min": 18, "max": 24},
+    "hum_sol": {"min": 40, "max": 70},
+    "lux": {"min": 1500, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Schlumbergera (Cactus de Noël)",
+    "t_air": {"min": 15, "max": 25},
+    "t_sol": {"min": 16, "max": 22},
+    "hum_sol": {"min": 40, "max": 75},
+    "lux": {"min": 1500, "max": 8000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Hatiora gaertneri (Cactus de Pâques)",
+    "t_air": {"min": 15, "max": 25},
+    "t_sol": {"min": 16, "max": 22},
+    "hum_sol": {"min": 40, "max": 75},
+    "lux": {"min": 1500, "max": 8000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Epiphyllum anguliger (Cactus zigzag)",
+    "t_air": {"min": 18, "max": 28},
+    "t_sol": {"min": 18, "max": 24},
+    "hum_sol": {"min": 40, "max": 70},
+    "lux": {"min": 2000, "max": 8000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Euphorbia obesa (Euphorbe ballon)",
+    "t_air": {"min": 12, "max": 40},
+    "t_sol": {"min": 14, "max": 35},
+    "hum_sol": {"min": 10, "max": 25},
+    "lux": {"min": 10000, "max": 40000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Euphorbia milii (Épine du Christ)",
+    "t_air": {"min": 15, "max": 35},
+    "t_sol": {"min": 15, "max": 30},
+    "hum_sol": {"min": 20, "max": 50},
+    "lux": {"min": 10000, "max": 40000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Euphorbia anoplia (Euphorbe pomme de pin)",
+    "t_air": {"min": 12, "max": 35},
+    "t_sol": {"min": 14, "max": 28},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 10000, "max": 35000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Peperomia caperata Rosso",
+    "t_air": {"min": 18, "max": 26},
+    "t_sol": {"min": 18, "max": 24},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 2000, "max": 6000},
+    "pression_ref": 1013
+  },
+
+  {
+    "nom": "Peperomia argyreia (Pépéromia pastèque)",
+    "t_air": {"min": 18, "max": 26},
+    "t_sol": {"min": 18, "max": 24},
+    "hum_sol": {"min": 40, "max": 70},
+    "lux": {"min": 2000, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Peperomia obtusifolia (Pourpier des bois)",
+    "t_air": {"min": 15, "max": 30},
+    "t_sol": {"min": 16, "max": 25},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 2000, "max": 8000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Peperomia prostrata (Chaîne de tortues)",
+    "t_air": {"min": 18, "max": 25},
+    "t_sol": {"min": 18, "max": 22},
+    "hum_sol": {"min": 50, "max": 75},
+    "lux": {"min": 1500, "max": 4000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Peperomia rotundifolia (Rampante)",
+    "t_air": {"min": 18, "max": 26},
+    "t_sol": {"min": 18, "max": 23},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 1500, "max": 4000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Peperomia polybotrya (Goutte de pluie)",
+    "t_air": {"min": 18, "max": 28},
+    "t_sol": {"min": 18, "max": 24},
+    "hum_sol": {"min": 35, "max": 65},
+    "lux": {"min": 2000, "max": 6000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Peperomia Hope",
+    "t_air": {"min": 16, "max": 27},
+    "t_sol": {"min": 17, "max": 24},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 2000, "max": 7000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Peperomia angulata (Coléoptère)",
+    "t_air": {"min": 18, "max": 26},
+    "t_sol": {"min": 18, "max": 23},
+    "hum_sol": {"min": 40, "max": 70},
+    "lux": {"min": 1500, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Ceropegia woodii (Chaîne de cœurs)",
+    "t_air": {"min": 15, "max": 28},
+    "t_sol": {"min": 15, "max": 24},
+    "hum_sol": {"min": 20, "max": 45},
+    "lux": {"min": 5000, "max": 20000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Senecio rowleyanus (Collier de perles)",
+    "t_air": {"min": 15, "max": 30},
+    "t_sol": {"min": 16, "max": 25},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 10000, "max": 30000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Senecio peregrinus (Collier de dauphins)",
+    "t_air": {"min": 15, "max": 30},
+    "t_sol": {"min": 16, "max": 25},
+    "hum_sol": {"min": 10, "max": 35},
+    "lux": {"min": 10000, "max": 30000},
+    "pression_ref": 1013
+  },
+
+  {
+    "nom": "Tradescantia zebrina (Misère pourpre)",
+    "t_air": {"min": 15, "max": 30},
+    "t_sol": {"min": 15, "max": 24},
+    "hum_sol": {"min": 40, "max": 75},
+    "lux": {"min": 2500, "max": 8000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Tradescantia nanouk (Misère rose)",
+    "t_air": {"min": 15, "max": 28},
+    "t_sol": {"min": 16, "max": 24},
+    "hum_sol": {"min": 40, "max": 70},
+    "lux": {"min": 4000, "max": 10000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Callisia repens (Liane tortue)",
+    "t_air": {"min": 15, "max": 28},
+    "t_sol": {"min": 16, "max": 24},
+    "hum_sol": {"min": 45, "max": 75},
+    "lux": {"min": 3000, "max": 12000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Pilea glauca (Plante poudre à canon)",
+    "t_air": {"min": 18, "max": 26},
+    "t_sol": {"min": 18, "max": 23},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 1500, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Pilea depressa",
+    "t_air": {"min": 18, "max": 26},
+    "t_sol": {"min": 18, "max": 23},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 1500, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Hoya kerrii (Cœur de Saint-Valentin)",
+    "t_air": {"min": 18, "max": 30},
+    "t_sol": {"min": 18, "max": 25},
+    "hum_sol": {"min": 20, "max": 45},
+    "lux": {"min": 3000, "max": 15000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Hoya carnosa Compacta (Corde hindoue)",
+    "t_air": {"min": 16, "max": 28},
+    "t_sol": {"min": 17, "max": 24},
+    "hum_sol": {"min": 25, "max": 50},
+    "lux": {"min": 3000, "max": 10000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Dischidia nummularia (Plante fourmi)",
+    "t_air": {"min": 18, "max": 30},
+    "t_sol": {"min": 19, "max": 26},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 2000, "max": 6000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Dischidia ruscifolia (Million de cœurs)",
+    "t_air": {"min": 18, "max": 30},
+    "t_sol": {"min": 19, "max": 26},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 2000, "max": 6000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Philodendron micans (Velours)",
+    "t_air": {"min": 18, "max": 27},
+    "t_sol": {"min": 18, "max": 24},
+    "hum_sol": {"min": 40, "max": 75},
+    "lux": {"min": 1000, "max": 4000},
+    "pression_ref": 1013
+  },
+
+  {
+    "nom": "Scindapsus pictus Argyraeus (Petit Pothos argenté)",
+    "t_air": {"min": 18, "max": 27},
+    "t_sol": {"min": 18, "max": 24},
+    "hum_sol": {"min": 35, "max": 65},
+    "lux": {"min": 1500, "max": 4000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Ficus pumila (Figuier rampant)",
+    "t_air": {"min": 15, "max": 24},
+    "t_sol": {"min": 16, "max": 22},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 2000, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Saxifraga stolonifera (Barbe de vieillard)",
+    "t_air": {"min": 10, "max": 22},
+    "t_sol": {"min": 12, "max": 20},
+    "hum_sol": {"min": 45, "max": 75},
+    "lux": {"min": 1500, "max": 4000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Pilea peperomioides (Plante à monnaie chinoise)",
+    "t_air": {"min": 13, "max": 25},
+    "t_sol": {"min": 15, "max": 22},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 5000, "max": 15000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Pilea cadierei (Plante aluminium)",
+    "t_air": {"min": 18, "max": 24},
+    "t_sol": {"min": 18, "max": 22},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 1500, "max": 4000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Pilea involucrata Moon Valley",
+    "t_air": {"min": 18, "max": 26},
+    "t_sol": {"min": 18, "max": 23},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 1000, "max": 3000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Fittonia albivenis (Plante mosaïque)",
+    "t_air": {"min": 18, "max": 26},
+    "t_sol": {"min": 18, "max": 24},
+    "hum_sol": {"min": 60, "max": 85},
+    "lux": {"min": 500, "max": 1500},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Hypoestes phyllostachya (Plante aux éphélides)",
+    "t_air": {"min": 18, "max": 24},
+    "t_sol": {"min": 18, "max": 22},
+    "hum_sol": {"min": 45, "max": 75},
+    "lux": {"min": 2500, "max": 6000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Soleirolia soleirolii (Larmes d'ange)",
+    "t_air": {"min": 10, "max": 24},
+    "t_sol": {"min": 12, "max": 20},
+    "hum_sol": {"min": 60, "max": 90},
+    "lux": {"min": 1000, "max": 3000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Nertera granadensis (Plante perles corail)",
+    "t_air": {"min": 10, "max": 18},
+    "t_sol": {"min": 10, "max": 16},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 2000, "max": 5000},
+    "pression_ref": 1013
+  },
+
+  {
+    "nom": "Oxalis triangularis (Faux trèfle pourpre)",
+    "t_air": {"min": 15, "max": 25},
+    "t_sol": {"min": 15, "max": 22},
+    "hum_sol": {"min": 40, "max": 70},
+    "lux": {"min": 2500, "max": 10000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Maranta leuconeura (Dormeuse)",
+    "t_air": {"min": 18, "max": 27},
+    "t_sol": {"min": 18, "max": 24},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 1000, "max": 3500},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Calathea lancifolia (Rattlesnake)",
+    "t_air": {"min": 18, "max": 24},
+    "t_sol": {"min": 18, "max": 22},
+    "hum_sol": {"min": 60, "max": 85},
+    "lux": {"min": 800, "max": 2500},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Syngonium Pixie",
+    "t_air": {"min": 16, "max": 27},
+    "t_sol": {"min": 17, "max": 24},
+    "hum_sol": {"min": 50, "max": 75},
+    "lux": {"min": 1500, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Alocasia Black Velvet",
+    "t_air": {"min": 18, "max": 27},
+    "t_sol": {"min": 19, "max": 25},
+    "hum_sol": {"min": 40, "max": 65},
+    "lux": {"min": 2500, "max": 6500},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Alocasia Bambino",
+    "t_air": {"min": 18, "max": 28},
+    "t_sol": {"min": 18, "max": 25},
+    "hum_sol": {"min": 55, "max": 80},
+    "lux": {"min": 3000, "max": 7500},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Aglaonema Red Zircon",
+    "t_air": {"min": 16, "max": 29},
+    "t_sol": {"min": 17, "max": 25},
+    "hum_sol": {"min": 35, "max": 65},
+    "lux": {"min": 2000, "max": 6000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Begonia maculata (Bégonia bambou)",
+    "t_air": {"min": 18, "max": 25},
+    "t_sol": {"min": 18, "max": 23},
+    "hum_sol": {"min": 50, "max": 75},
+    "lux": {"min": 3500, "max": 12000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Begonia rex",
+    "t_air": {"min": 15, "max": 24},
+    "t_sol": {"min": 16, "max": 22},
+    "hum_sol": {"min": 60, "max": 85},
+    "lux": {"min": 1500, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Sansevieria cylindrica (Mini Mikado)",
+    "t_air": {"min": 12, "max": 32},
+    "t_sol": {"min": 13, "max": 28},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 800, "max": 15000},
+    "pression_ref": 1013
+  },
+
+  {
+    "nom": "Sansevieria Golden Hahnii (Sansevieria naine)",
+    "t_air": {"min": 12, "max": 30},
+    "t_sol": {"min": 13, "max": 28},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 1000, "max": 6000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Dracaena Compacta",
+    "t_air": {"min": 15, "max": 28},
+    "t_sol": {"min": 16, "max": 24},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 1000, "max": 4000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Chlorophytum comosum Bonnie (Plante araignée frisée)",
+    "t_air": {"min": 13, "max": 27},
+    "t_sol": {"min": 14, "max": 24},
+    "hum_sol": {"min": 40, "max": 70},
+    "lux": {"min": 2000, "max": 8000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Asparagus setaceus (Asparagus des fleuristes)",
+    "t_air": {"min": 12, "max": 24},
+    "t_sol": {"min": 12, "max": 20},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 1500, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Saintpaulia (Violette du Cap)",
+    "t_air": {"min": 18, "max": 24},
+    "t_sol": {"min": 18, "max": 22},
+    "hum_sol": {"min": 50, "max": 75},
+    "lux": {"min": 2000, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Streptocarpus (Primevère du Cap)",
+    "t_air": {"min": 15, "max": 24},
+    "t_sol": {"min": 16, "max": 22},
+    "hum_sol": {"min": 50, "max": 75},
+    "lux": {"min": 1500, "max": 4500},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Cyclamen persicum (Mini Cyclamen)",
+    "t_air": {"min": 10, "max": 18},
+    "t_sol": {"min": 10, "max": 16},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 2000, "max": 6000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Kalanchoe blossfeldiana (Kalanchoé des fleuristes)",
+    "t_air": {"min": 15, "max": 30},
+    "t_sol": {"min": 16, "max": 25},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 5000, "max": 20000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Primula obconica (Primevère d'intérieur)",
+    "t_air": {"min": 10, "max": 18},
+    "t_sol": {"min": 10, "max": 16},
+    "hum_sol": {"min": 60, "max": 85},
+    "lux": {"min": 2000, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Campanula isophylla (Étoile de Bethléem)",
+    "t_air": {"min": 10, "max": 22},
+    "t_sol": {"min": 12, "max": 20},
+    "hum_sol": {"min": 50, "max": 75},
+    "lux": {"min": 5000, "max": 15000},
+    "pression_ref": 1013
+  },
+
+  {
+    "nom": "Exacum affine (Violette de Perse)",
+    "t_air": {"min": 15, "max": 24},
+    "t_sol": {"min": 16, "max": 22},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 2500, "max": 8000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Phalaenopsis Mini (Orchidée papillon)",
+    "t_air": {"min": 18, "max": 28},
+    "t_sol": {"min": 18, "max": 25},
+    "hum_sol": {"min": 40, "max": 70},
+    "lux": {"min": 2000, "max": 6000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Macodes petola (Orchidée bijou)",
+    "t_air": {"min": 18, "max": 26},
+    "t_sol": {"min": 18, "max": 24},
+    "hum_sol": {"min": 60, "max": 85},
+    "lux": {"min": 800, "max": 2500},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Ludisia discolor (Orchidée joyau)",
+    "t_air": {"min": 18, "max": 27},
+    "t_sol": {"min": 18, "max": 24},
+    "hum_sol": {"min": 60, "max": 85},
+    "lux": {"min": 1000, "max": 3000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Dionaea muscipula (Dionée attrape-mouche)",
+    "t_air": {"min": 5, "max": 32},
+    "t_sol": {"min": 5, "max": 28},
+    "hum_sol": {"min": 70, "max": 100},
+    "lux": {"min": 15000, "max": 45000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Drosera capensis (Rossolis)",
+    "t_air": {"min": 15, "max": 32},
+    "t_sol": {"min": 15, "max": 28},
+    "hum_sol": {"min": 70, "max": 100},
+    "lux": {"min": 10000, "max": 35000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Pinguicula (Grassette)",
+    "t_air": {"min": 15, "max": 28},
+    "t_sol": {"min": 15, "max": 25},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 3000, "max": 12000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Asplenium nidus Crispy Wave",
+    "t_air": {"min": 16, "max": 24},
+    "t_sol": {"min": 16, "max": 22},
+    "hum_sol": {"min": 60, "max": 85},
+    "lux": {"min": 1000, "max": 3000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Pellaea rotundifolia (Fougère bouton)",
+    "t_air": {"min": 15, "max": 24},
+    "t_sol": {"min": 15, "max": 22},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 1500, "max": 4500},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Tillandsia (Fille de l'air)",
+    "t_air": {"min": 15, "max": 32},
+    "t_sol": {"min": 0, "max": 0},
+    "hum_sol": {"min": 0, "max": 0},
+    "lux": {"min": 5000, "max": 20000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Olivier (Olea europaea)",
+    "t_air": {"min": 5, "max": 40},
+    "t_sol": {"min": 8, "max": 30},
+    "hum_sol": {"min": 20, "max": 50},
+    "lux": {"min": 30000, "max": 100000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Calamondin (Citrus mitis)",
+    "t_air": {"min": 12, "max": 30},
+    "t_sol": {"min": 15, "max": 25},
+    "hum_sol": {"min": 40, "max": 75},
+    "lux": {"min": 20000, "max": 60000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Kumquat (Fortunella margarita)",
+    "t_air": {"min": 10, "max": 32},
+    "t_sol": {"min": 15, "max": 26},
+    "hum_sol": {"min": 40, "max": 70},
+    "lux": {"min": 25000, "max": 70000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Laurier-Sauce (Laurus nobilis)",
+    "t_air": {"min": 5, "max": 35},
+    "t_sol": {"min": 7, "max": 25},
+    "hum_sol": {"min": 30, "max": 65},
+    "lux": {"min": 10000, "max": 50000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Myrte (Myrtus communis)",
+    "t_air": {"min": 8, "max": 30},
+    "t_sol": {"min": 10, "max": 25},
+    "hum_sol": {"min": 40, "max": 75},
+    "lux": {"min": 15000, "max": 45000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Grenadier Nain (Punica granatum Nana)",
+    "t_air": {"min": 5, "max": 38},
+    "t_sol": {"min": 10, "max": 30},
+    "hum_sol": {"min": 30, "max": 65},
+    "lux": {"min": 20000, "max": 70000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Palmier Nain (Chamaerops humilis)",
+    "t_air": {"min": 5, "max": 38},
+    "t_sol": {"min": 8, "max": 30},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 15000, "max": 60000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Jasmin Sambac",
+    "t_air": {"min": 15, "max": 32},
+    "t_sol": {"min": 16, "max": 28},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 8000, "max": 30000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Cyclamen de Perse",
+    "t_air": {"min": 10, "max": 18},
+    "t_sol": {"min": 10, "max": 16},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 2500, "max": 8000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Lierre d'Alger",
+    "t_air": {"min": 10, "max": 25},
+    "t_sol": {"min": 12, "max": 20},
+    "hum_sol": {"min": 40, "max": 75},
+    "lux": {"min": 2000, "max": 12000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Romarin",
+    "t_air": {"min": 5, "max": 35},
+    "t_sol": {"min": 7, "max": 28},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 30000, "max": 80000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Thym",
+    "t_air": {"min": -5, "max": 35},
+    "t_sol": {"min": 5, "max": 28},
+    "hum_sol": {"min": 10, "max": 35},
+    "lux": {"min": 30000, "max": 80000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Thym Citron",
+    "t_air": {"min": 5, "max": 35},
+    "t_sol": {"min": 7, "max": 28},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 25000, "max": 70000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Origan",
+    "t_air": {"min": 5, "max": 35},
+    "t_sol": {"min": 7, "max": 28},
+    "hum_sol": {"min": 20, "max": 50},
+    "lux": {"min": 25000, "max": 70000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Marjolaine",
+    "t_air": {"min": 10, "max": 32},
+    "t_sol": {"min": 12, "max": 26},
+    "hum_sol": {"min": 25, "max": 55},
+    "lux": {"min": 20000, "max": 60000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Sauge",
+    "t_air": {"min": 5, "max": 35},
+    "t_sol": {"min": 8, "max": 28},
+    "hum_sol": {"min": 20, "max": 45},
+    "lux": {"min": 30000, "max": 70000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Sauge Ananas",
+    "t_air": {"min": 12, "max": 30},
+    "t_sol": {"min": 14, "max": 25},
+    "hum_sol": {"min": 40, "max": 70},
+    "lux": {"min": 15000, "max": 50000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Basilic Grand Vert",
+    "t_air": {"min": 18, "max": 32},
+    "t_sol": {"min": 18, "max": 26},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 10000, "max": 40000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Basilic Grec",
+    "t_air": {"min": 18, "max": 32},
+    "t_sol": {"min": 18, "max": 26},
+    "hum_sol": {"min": 45, "max": 75},
+    "lux": {"min": 10000, "max": 40000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Basilic Pourpre",
+    "t_air": {"min": 18, "max": 32},
+    "t_sol": {"min": 18, "max": 26},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 15000, "max": 45000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Menthe Marocaine",
+    "t_air": {"min": 10, "max": 28},
+    "t_sol": {"min": 12, "max": 22},
+    "hum_sol": {"min": 60, "max": 85},
+    "lux": {"min": 5000, "max": 25000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Menthe Poivrée",
+    "t_air": {"min": 8, "max": 26},
+    "t_sol": {"min": 10, "max": 22},
+    "hum_sol": {"min": 60, "max": 90},
+    "lux": {"min": 3000, "max": 20000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Menthe Chocolat",
+    "t_air": {"min": 10, "max": 28},
+    "t_sol": {"min": 12, "max": 22},
+    "hum_sol": {"min": 60, "max": 85},
+    "lux": {"min": 4000, "max": 20000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Persil Plat",
+    "t_air": {"min": 10, "max": 25},
+    "t_sol": {"min": 12, "max": 22},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 2500, "max": 15000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Ciboulette",
+    "t_air": {"min": 5, "max": 28},
+    "t_sol": {"min": 10, "max": 24},
+    "hum_sol": {"min": 40, "max": 75},
+    "lux": {"min": 5000, "max": 30000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Estragon",
+    "t_air": {"min": 12, "max": 28},
+    "t_sol": {"min": 14, "max": 24},
+    "hum_sol": {"min": 35, "max": 65},
+    "lux": {"min": 10000, "max": 40000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Sarriette",
+    "t_air": {"min": 5, "max": 35},
+    "t_sol": {"min": 8, "max": 28},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 30000, "max": 80000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Mélisse",
+    "t_air": {"min": 5, "max": 26},
+    "t_sol": {"min": 10, "max": 22},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 3000, "max": 20000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Verveine Citronnelle",
+    "t_air": {"min": 12, "max": 32},
+    "t_sol": {"min": 15, "max": 26},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 15000, "max": 50000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Lavande Papillon",
+    "t_air": {"min": 5, "max": 35},
+    "t_sol": {"min": 8, "max": 28},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 30000, "max": 80000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Aloe Vera",
+    "t_air": {"min": 12, "max": 40},
+    "t_sol": {"min": 14, "max": 35},
+    "hum_sol": {"min": 15, "max": 35},
+    "lux": {"min": 5000, "max": 25000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Aloe Arborescens",
+    "t_air": {"min": 10, "max": 38},
+    "t_sol": {"min": 12, "max": 32},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 8000, "max": 30000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Aloe Aristata (Aloès dentelle)",
+    "t_air": {"min": 5, "max": 30},
+    "t_sol": {"min": 7, "max": 25},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 3000, "max": 15000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Aloe Variegata (Aloès tigre)",
+    "t_air": {"min": 10, "max": 30},
+    "t_sol": {"min": 12, "max": 25},
+    "hum_sol": {"min": 10, "max": 25},
+    "lux": {"min": 3000, "max": 10000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Aloe Mitriformis",
+    "t_air": {"min": 10, "max": 35},
+    "t_sol": {"min": 12, "max": 30},
+    "hum_sol": {"min": 15, "max": 35},
+    "lux": {"min": 10000, "max": 40000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Agave Nana",
+    "t_air": {"min": 5, "max": 40},
+    "t_sol": {"min": 8, "max": 35},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 20000, "max": 60000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Agave Victoria-reginae",
+    "t_air": {"min": 5, "max": 35},
+    "t_sol": {"min": 8, "max": 30},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 15000, "max": 50000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Agave Filifera",
+    "t_air": {"min": 5, "max": 38},
+    "t_sol": {"min": 8, "max": 32},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 20000, "max": 60000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Opuntia Microdasys (Oreilles de Mickey)",
+    "t_air": {"min": 8, "max": 40},
+    "t_sol": {"min": 10, "max": 35},
+    "hum_sol": {"min": 5, "max": 20},
+    "lux": {"min": 20000, "max": 70000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Opuntia Ficus-Indica (Figuier de Barbarie)",
+    "t_air": {"min": 5, "max": 45},
+    "t_sol": {"min": 8, "max": 38},
+    "hum_sol": {"min": 5, "max": 25},
+    "lux": {"min": 25000, "max": 80000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Crassula Ovata (Arbre de Jade)",
+    "t_air": {"min": 10, "max": 32},
+    "t_sol": {"min": 12, "max": 28},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 10000, "max": 30000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Crassula Hobbit (Oreille de Shrek)",
+    "t_air": {"min": 10, "max": 32},
+    "t_sol": {"min": 12, "max": 28},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 10000, "max": 30000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Portulacaria Afra (Arbre à éléphant)",
+    "t_air": {"min": 12, "max": 40},
+    "t_sol": {"min": 14, "max": 32},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 15000, "max": 50000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Sedum Morganianum (Queue d'âne)",
+    "t_air": {"min": 10, "max": 28},
+    "t_sol": {"min": 12, "max": 24},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 8000, "max": 25000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Sedum Burrito",
+    "t_air": {"min": 10, "max": 28},
+    "t_sol": {"min": 12, "max": 24},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 8000, "max": 25000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Sedum Palmeri",
+    "t_air": {"min": 2, "max": 35},
+    "t_sol": {"min": 5, "max": 28},
+    "hum_sol": {"min": 15, "max": 45},
+    "lux": {"min": 10000, "max": 40000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Sedum Rubrotinctum (Plante bonbon)",
+    "t_air": {"min": 10, "max": 35},
+    "t_sol": {"min": 12, "max": 28},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 15000, "max": 45000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Echeveria Elegans",
+    "t_air": {"min": 10, "max": 35},
+    "t_sol": {"min": 12, "max": 30},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 15000, "max": 45000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Echeveria Agavoides",
+    "t_air": {"min": 12, "max": 38},
+    "t_sol": {"min": 12, "max": 32},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 15000, "max": 50000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Echeveria Perle von Nürnberg",
+    "t_air": {"min": 15, "max": 35},
+    "t_sol": {"min": 15, "max": 30},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 15000, "max": 45000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Echeveria Setosa (Floconneuse)",
+    "t_air": {"min": 10, "max": 35},
+    "t_sol": {"min": 12, "max": 30},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 15000, "max": 45000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Aeonium Arboreum",
+    "t_air": {"min": 10, "max": 30},
+    "t_sol": {"min": 12, "max": 25},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 10000, "max": 35000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Aeonium Kiwi",
+    "t_air": {"min": 12, "max": 28},
+    "t_sol": {"min": 12, "max": 24},
+    "hum_sol": {"min": 15, "max": 40},
+    "lux": {"min": 8000, "max": 25000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Aeonium Tabuliforme (Plateau)",
+    "t_air": {"min": 10, "max": 25},
+    "t_sol": {"min": 12, "max": 22},
+    "hum_sol": {"min": 15, "max": 35},
+    "lux": {"min": 5000, "max": 15000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Senecio Cineraria (Cinéraire maritime)",
+    "t_air": {"min": -5, "max": 30},
+    "t_sol": {"min": 5, "max": 25},
+    "hum_sol": {"min": 20, "max": 50},
+    "lux": {"min": 20000, "max": 70000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Senecio Rowleyanus (Collier de perles)",
+    "t_air": {"min": 15, "max": 30},
+    "t_sol": {"min": 16, "max": 25},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 10000, "max": 30000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Haworthia Fasciata (Zèbre)",
+    "t_air": {"min": 12, "max": 30},
+    "t_sol": {"min": 12, "max": 25},
+    "hum_sol": {"min": 15, "max": 35},
+    "lux": {"min": 2000, "max": 7000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Haworthia Cooperi (Transparente)",
+    "t_air": {"min": 15, "max": 28},
+    "t_sol": {"min": 15, "max": 24},
+    "hum_sol": {"min": 20, "max": 40},
+    "lux": {"min": 1500, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Gasteria Verrucosa",
+    "t_air": {"min": 12, "max": 28},
+    "t_sol": {"min": 14, "max": 24},
+    "hum_sol": {"min": 20, "max": 40},
+    "lux": {"min": 1000, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Kalanchoe Thyrsiflora (Pancake)",
+    "t_air": {"min": 15, "max": 35},
+    "t_sol": {"min": 15, "max": 30},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 10000, "max": 35000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Kalanchoe Tomentosa (Plante panda)",
+    "t_air": {"min": 15, "max": 30},
+    "t_sol": {"min": 16, "max": 25},
+    "hum_sol": {"min": 15, "max": 35},
+    "lux": {"min": 5000, "max": 25000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Kalanchoe Blossfeldiana (Kalanchoé des fleuristes)",
+    "t_air": {"min": 15, "max": 28},
+    "t_sol": {"min": 16, "max": 24},
+    "hum_sol": {"min": 25, "max": 55},
+    "lux": {"min": 5000, "max": 20000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Euphorbia Tirucalli (Plante crayon)",
+    "t_air": {"min": 12, "max": 40},
+    "t_sol": {"min": 14, "max": 35},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 15000, "max": 60000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Euphorbia Trigona (Arbre à lait)",
+    "t_air": {"min": 15, "max": 35},
+    "t_sol": {"min": 16, "max": 30},
+    "hum_sol": {"min": 15, "max": 35},
+    "lux": {"min": 10000, "max": 45000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Euphorbia Obesa (Cactus ballon)",
+    "t_air": {"min": 12, "max": 35},
+    "t_sol": {"min": 14, "max": 30},
+    "hum_sol": {"min": 5, "max": 20},
+    "lux": {"min": 10000, "max": 40000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Bougainvillier Mini Thai",
+    "t_air": {"min": 15, "max": 40},
+    "t_sol": {"min": 18, "max": 35},
+    "hum_sol": {"min": 30, "max": 65},
+    "lux": {"min": 30000, "max": 100000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Laurier-Rose Nain",
+    "t_air": {"min": 5, "max": 35},
+    "t_sol": {"min": 8, "max": 30},
+    "hum_sol": {"min": 30, "max": 70},
+    "lux": {"min": 30000, "max": 90000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Dipladénia (Mandevilla)",
+    "t_air": {"min": 15, "max": 30},
+    "t_sol": {"min": 18, "max": 28},
+    "hum_sol": {"min": 40, "max": 75},
+    "lux": {"min": 10000, "max": 50000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Pélargonium Odorant Citron",
+    "t_air": {"min": 10, "max": 30},
+    "t_sol": {"min": 12, "max": 25},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 15000, "max": 60000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Pélargonium Zonale (Géranium)",
+    "t_air": {"min": 10, "max": 32},
+    "t_sol": {"min": 12, "max": 28},
+    "hum_sol": {"min": 35, "max": 65},
+    "lux": {"min": 20000, "max": 70000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Pélargonium Lierre (Géranium-lierre)",
+    "t_air": {"min": 10, "max": 30},
+    "t_sol": {"min": 12, "max": 25},
+    "hum_sol": {"min": 30, "max": 65},
+    "lux": {"min": 20000, "max": 80000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Plumbago (Dentelaire du Cap)",
+    "t_air": {"min": 7, "max": 32},
+    "t_sol": {"min": 10, "max": 26},
+    "hum_sol": {"min": 40, "max": 75},
+    "lux": {"min": 25000, "max": 80000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Lantana",
+    "t_air": {"min": 10, "max": 38},
+    "t_sol": {"min": 12, "max": 30},
+    "hum_sol": {"min": 35, "max": 70},
+    "lux": {"min": 30000, "max": 100000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Hibiscus rosa-sinensis",
+    "t_air": {"min": 15, "max": 32},
+    "t_sol": {"min": 18, "max": 28},
+    "hum_sol": {"min": 50, "max": 85},
+    "lux": {"min": 15000, "max": 60000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Strelitzia reginae (Oiseau de paradis)",
+    "t_air": {"min": 12, "max": 35},
+    "t_sol": {"min": 15, "max": 30},
+    "hum_sol": {"min": 40, "max": 75},
+    "lux": {"min": 20000, "max": 100000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Zamioculcas (Plante ZZ)",
+    "t_air": {"min": 15, "max": 35},
+    "t_sol": {"min": 15, "max": 28},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 500, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Sansevieria trifasciata",
+    "t_air": {"min": 12, "max": 35},
+    "t_sol": {"min": 13, "max": 30},
+    "hum_sol": {"min": 10, "max": 25},
+    "lux": {"min": 800, "max": 10000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Sansevieria Cylindrica",
+    "t_air": {"min": 12, "max": 35},
+    "t_sol": {"min": 13, "max": 30},
+    "hum_sol": {"min": 10, "max": 25},
+    "lux": {"min": 800, "max": 10000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Dracaena Marginata",
+    "t_air": {"min": 16, "max": 28},
+    "t_sol": {"min": 16, "max": 24},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 1000, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Yucca elephantipes",
+    "t_air": {"min": 10, "max": 35},
+    "t_sol": {"min": 12, "max": 30},
+    "hum_sol": {"min": 15, "max": 45},
+    "lux": {"min": 5000, "max": 50000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Beaucarnea (Pied d'éléphant)",
+    "t_air": {"min": 10, "max": 30},
+    "t_sol": {"min": 12, "max": 25},
+    "hum_sol": {"min": 10, "max": 30},
+    "lux": {"min": 10000, "max": 50000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Ficus Ginseng",
+    "t_air": {"min": 15, "max": 28},
+    "t_sol": {"min": 17, "max": 24},
+    "hum_sol": {"min": 40, "max": 75},
+    "lux": {"min": 2500, "max": 7000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Schefflera (Arbre parapluie)",
+    "t_air": {"min": 15, "max": 27},
+    "t_sol": {"min": 15, "max": 24},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 2000, "max": 8000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Asparagus (Asperge ornementale)",
+    "t_air": {"min": 12, "max": 24},
+    "t_sol": {"min": 12, "max": 20},
+    "hum_sol": {"min": 40, "max": 70},
+    "lux": {"min": 2000, "max": 10000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Asparagus Plumosus",
+    "t_air": {"min": 13, "max": 24},
+    "t_sol": {"min": 13, "max": 20},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 1500, "max": 5000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Soleirolia (Larmes d'ange)",
+    "t_air": {"min": 10, "max": 24},
+    "t_sol": {"min": 12, "max": 20},
+    "hum_sol": {"min": 60, "max": 90},
+    "lux": {"min": 1000, "max": 3000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Tradescantia (Misère)",
+    "t_air": {"min": 15, "max": 30},
+    "t_sol": {"min": 15, "max": 24},
+    "hum_sol": {"min": 40, "max": 75},
+    "lux": {"min": 2500, "max": 8000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Oxalis Triangularis",
+    "t_air": {"min": 15, "max": 25},
+    "t_sol": {"min": 15, "max": 22},
+    "hum_sol": {"min": 40, "max": 70},
+    "lux": {"min": 2500, "max": 10000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Hoya Carnosa",
+    "t_air": {"min": 16, "max": 28},
+    "t_sol": {"min": 17, "max": 24},
+    "hum_sol": {"min": 25, "max": 50},
+    "lux": {"min": 3000, "max": 10000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Hoya Kerrii",
+    "t_air": {"min": 18, "max": 30},
+    "t_sol": {"min": 18, "max": 25},
+    "hum_sol": {"min": 20, "max": 45},
+    "lux": {"min": 3000, "max": 15000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Ceropegia Woodii (Chaîne de cœurs)",
+    "t_air": {"min": 15, "max": 28},
+    "t_sol": {"min": 15, "max": 24},
+    "hum_sol": {"min": 20, "max": 45},
+    "lux": {"min": 5000, "max": 20000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Peperomia Hope",
+    "t_air": {"min": 16, "max": 27},
+    "t_sol": {"min": 17, "max": 24},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 2000, "max": 7000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Peperomia Rosso",
+    "t_air": {"min": 18, "max": 26},
+    "t_sol": {"min": 18, "max": 24},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 2000, "max": 6000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Fougère Capillaire (Adiantum)",
+    "t_air": {"min": 18, "max": 24},
+    "t_sol": {"min": 18, "max": 22},
+    "hum_sol": {"min": 70, "max": 90},
+    "lux": {"min": 500, "max": 1500},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Fougère Boston (Nephrolepis)",
+    "t_air": {"min": 15, "max": 24},
+    "t_sol": {"min": 15, "max": 21},
+    "hum_sol": {"min": 75, "max": 95},
+    "lux": {"min": 400, "max": 1500},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Phlebodium (Fougère bleue)",
+    "t_air": {"min": 15, "max": 25},
+    "t_sol": {"min": 16, "max": 22},
+    "hum_sol": {"min": 50, "max": 80},
+    "lux": {"min": 1000, "max": 3000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Anthurium",
+    "t_air": {"min": 18, "max": 28},
+    "t_sol": {"min": 18, "max": 25},
+    "hum_sol": {"min": 60, "max": 80},
+    "lux": {"min": 1500, "max": 3000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Spathiphyllum (Fleur de lune)",
+    "t_air": {"min": 18, "max": 26},
+    "t_sol": {"min": 16, "max": 22},
+    "hum_sol": {"min": 60, "max": 90},
+    "lux": {"min": 500, "max": 2500},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Callisia Repens",
+    "t_air": {"min": 15, "max": 28},
+    "t_sol": {"min": 16, "max": 24},
+    "hum_sol": {"min": 45, "max": 75},
+    "lux": {"min": 3000, "max": 12000},
+    "pression_ref": 1013
+  },
+  {
+    "nom": "Pilea Peperomioides",
+    "t_air": {"min": 13, "max": 25},
+    "t_sol": {"min": 15, "max": 22},
+    "hum_sol": {"min": 30, "max": 60},
+    "lux": {"min": 5000, "max": 15000},
+    "pression_ref": 1013
+  }
+]

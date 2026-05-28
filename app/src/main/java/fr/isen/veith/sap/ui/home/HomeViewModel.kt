@@ -152,11 +152,11 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     private fun computeHealth(data: SensorData, plant: Plant): Float {
         var score = 100f
         val humidMid = (plant.humidityMin + plant.humidityMax) / 2f
-        score -= (abs(data.humidity - humidMid) / humidMid * 30f).coerceAtMost(30f)
-        if (data.luminosity < plant.luxMin)
-            score -= ((plant.luxMin - data.luminosity) / plant.luxMin * 30f).coerceAtMost(30f)
+        score -= (abs(data.humidity - humidMid) / ((plant.humidityMax - plant.humidityMin) / 2f).coerceAtLeast(1f) * 30f).coerceAtMost(30f)
+        val luxMid = (plant.luxMin + plant.luxMax) / 2f
+        score -= (abs(data.luminosity - luxMid) / ((plant.luxMax - plant.luxMin) / 2f).coerceAtLeast(1f) * 30f).coerceAtMost(30f)
         val tempMid = (plant.tempMin + plant.tempMax) / 2f
-        score -= (abs(data.temperature - tempMid) / tempMid * 20f).coerceAtMost(20f)
+        score -= (abs(data.temperature - tempMid) / ((plant.tempMax - plant.tempMin) / 2f).coerceAtLeast(1f) * 20f).coerceAtMost(20f)
         return score.coerceIn(0f, 100f)
     }
 

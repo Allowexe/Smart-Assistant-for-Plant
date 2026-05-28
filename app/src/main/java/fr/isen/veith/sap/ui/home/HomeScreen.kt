@@ -341,7 +341,7 @@ private fun SensorSection(
     plant: Plant?
 ) {
     val humidAlert = plant != null && (humidity < plant.humidityMin || humidity > plant.humidityMax)
-    val luxAlert   = plant != null && luminosity < plant.luxMin
+    val luxAlert   = plant != null && (luminosity < plant.luxMin || luminosity > plant.luxMax)
     val tempAlert  = plant != null && (temperature < plant.tempMin || temperature > plant.tempMax)
 
     Row(
@@ -490,12 +490,14 @@ private fun TipsSection(
     val tipTooDry   = stringResource(R.string.tip_too_dry)
     val tipTooWet   = stringResource(R.string.tip_too_wet)
     val tipLowLight = stringResource(R.string.tip_low_light)
+    val tipTooBright = stringResource(R.string.tip_too_bright)
     val tipTooCold  = stringResource(R.string.tip_too_cold)
     val tipTooHot   = stringResource(R.string.tip_too_hot)
     val tips = buildList {
         if (sensorData.humidity < plant.humidityMin)    add("💧" to tipTooDry)
         if (sensorData.humidity > plant.humidityMax)    add("💦" to tipTooWet)
         if (sensorData.luminosity < plant.luxMin)       add("☀️" to tipLowLight)
+        if (sensorData.luminosity > plant.luxMax)       add("🌤️" to tipTooBright)
         if (sensorData.temperature < plant.tempMin)     add("🥶" to tipTooCold)
         if (sensorData.temperature > plant.tempMax)     add("🥵" to tipTooHot)
         if (isEmpty()) {
