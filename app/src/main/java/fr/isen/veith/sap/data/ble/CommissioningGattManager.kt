@@ -196,16 +196,20 @@ class CommissioningGattManager(private val context: Context) {
 
     // ── Parsing AP struct (little-endian, voir spec firmware) ─────────
 
-    // Format ST67W6X : [ssid_len:1B][channel:1B][rssi:1B signed][security:1B][ssid:ssid_len B]
+    // Format réel ST67W6X (44 bytes par AP) :
+    // [0x20:1B][channel:1B][rssi:2B LE int16][security:4B LE uint32][SSID:32B null-padded][extra:4B]
     private fun parseAP(raw: ByteArray): WifiAP? {
-        if (raw.size < 5) return null
-        val ssidLen = raw[0].toInt() and 0xFF
+        if (raw.size < 9) return null
         val channel = raw[1].toInt() and 0xFF
-        val rssi    = raw[2].toInt().let { if (it > 127) it - 256 else it }
-        val secVal  = raw[3].toInt() and 0xFF
-        val ssidEnd = minOf(4 + ssidLen, raw.size)
-        if (ssidEnd <= 4) return null
-        val ssid = String(raw, 4, ssidEnd - 4, Charsets.UTF_8).trim()
+        val rssi    = ByteBuffer.wrap(raw, 2, 2).order(ByteOrder.LITTLE_ENDIAN).short.toInt()
+        val secVal  = ByteBuffer.wrap(raw, 4, 4).order(ByteOrder.LITTLE_ENDIAN).int
+        val ssidEnd = minOf(40, raw.size)
+        if (ssidEnd <= 8) return null
+        val ssidBytes = raw.sliceArray(8 until ssidEnd)
+        val nullIdx = ssidBytes.indexOfFirst { it == 0.toByte() }
+        val ssidLen = if (nullIdx >= 0) nullIdx else ssidBytes.size
+        if (ssidLen == 0) return null
+        val ssid = String(ssidBytes, 0, ssidLen, Charsets.UTF_8).trim()
         if (ssid.isBlank()) return null
         return WifiAP(ssid = ssid, rssi = rssi, channel = channel, security = WifiSecurity.from(secVal))
     }
