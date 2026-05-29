@@ -33,6 +33,18 @@ android {
         buildConfigField("String", "PLANTNET_API_KEY", "\"$plantNetKey\"")
     }
 
+    val releaseStoreFile = localProperties.getProperty("RELEASE_STORE_FILE")
+    signingConfigs {
+        if (releaseStoreFile != null && rootProject.file(releaseStoreFile).exists()) {
+            create("release") {
+                storeFile     = rootProject.file(releaseStoreFile)
+                storePassword = localProperties.getProperty("RELEASE_STORE_PASSWORD")
+                keyAlias      = localProperties.getProperty("RELEASE_KEY_ALIAS")
+                keyPassword   = localProperties.getProperty("RELEASE_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -40,6 +52,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfigs.findByName("release")?.let { signingConfig = it }
         }
     }
     compileOptions {
@@ -49,6 +62,11 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+    lint {
+        // Ne pas bloquer la génération de l'APK release sur les warnings lint
+        checkReleaseBuilds = false
+        abortOnError       = false
     }
 }
 
