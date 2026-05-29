@@ -43,6 +43,18 @@ data class PlantNetGenus(val scientificNameWithoutAuthor: String)
 data class PlantNetFamily(val scientificNameWithoutAuthor: String)
 data class PlantNetGbif(val id: String?)
 
+// ── Modèles de réponse maladies (v2/diseases/identify) ────────────────
+data class PlantNetDiseaseResponse(
+    val results: List<PlantNetDiseaseResult>?,
+    val remainingIdentificationRequests: Int?
+)
+
+data class PlantNetDiseaseResult(
+    val name: String,            // code EPPO de la pathologie
+    val score: Double,
+    val description: String?     // nom courant / description lisible
+)
+
 // ── Interface Retrofit ────────────────────────────────────────────────
 interface PlantNetService {
 
@@ -55,6 +67,15 @@ interface PlantNetService {
         @Query("lang")    lang: String   = "fr",
         @Query("api-key") apiKey: String
     ): PlantNetResponse
+
+    @Multipart
+    @POST("v2/diseases/identify")
+    suspend fun identifyDisease(
+        @Part             images: List<MultipartBody.Part>,
+        @Part("organs") organs: okhttp3.RequestBody,
+        @Query("lang")    lang: String   = "fr",
+        @Query("api-key") apiKey: String
+    ): PlantNetDiseaseResponse
 }
 
 // ── Singleton Retrofit ────────────────────────────────────────────────

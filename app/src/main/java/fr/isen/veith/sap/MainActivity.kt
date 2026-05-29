@@ -125,6 +125,9 @@ fun SapApp() {
                 onNavigateToDashboard   = { navController.navigate(Routes.DASHBOARD) },
                 onNavigateToRecognition = { potId ->
                     navController.navigate("${Routes.RECOGNITION}/$potId")
+                },
+                onNavigateToDiseaseScan = { potId ->
+                    navController.navigate("${Routes.RECOGNITION}/$potId?disease=true")
                 }
             )
         }
@@ -145,14 +148,21 @@ fun SapApp() {
             )
         }
         composable(
-            route     = "${Routes.RECOGNITION}/{potId}",
-            arguments = listOf(navArgument("potId") {
-                type         = NavType.StringType
-                defaultValue = ""
-            })
+            route     = "${Routes.RECOGNITION}/{potId}?disease={disease}",
+            arguments = listOf(
+                navArgument("potId") {
+                    type         = NavType.StringType
+                    defaultValue = ""
+                },
+                navArgument("disease") {
+                    type         = NavType.BoolType
+                    defaultValue = false
+                }
+            )
         ) { backStackEntry ->
             RecognitionScreen(
-                potId        = backStackEntry.arguments?.getString("potId") ?: "",
+                potId              = backStackEntry.arguments?.getString("potId") ?: "",
+                startInDiseaseMode = backStackEntry.arguments?.getBoolean("disease") ?: false,
                 onPlantSaved = {
                     navController.navigate(Routes.HOME) {
                         popUpTo(Routes.HOME) { inclusive = false }

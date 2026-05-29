@@ -46,6 +46,8 @@
 
     <string name="btn_identify_plant">Identify a plant</string>
     <string name="btn_pair_pot">Pair a pot</string>
+    <string name="btn_home_identify">Identify</string>
+    <string name="btn_home_disease">Disease</string>
 
     <string name="achievement_first_pot_title">First pot</string>
     <string name="achievement_first_pot_desc">Pair your first connected pot</string>
@@ -132,4 +134,13 @@
     <string name="notif_help_title">%s needs help 🌱</string>
     <string name="notif_help_concerned">%s needs attention — check its sensors.</string>
     <string name="notif_help_sad">%s is suffering, act fast!</string>
+
+    <!-- ── Diseases ───────────────────────────────────────────────────── -->
+    <string name="btn_scan_disease">Scan for diseases</string>
+    <string name="disease_section_title">HEALTH DIAGNOSIS</string>
+    <string name="disease_analyzing">Analyzing diseases…</string>
+    <string name="disease_none">No disease detected 🌿</string>
+    <string name="disease_capture_title">Disease diagnosis</string>
+    <string name="disease_capture_hint">Frame the affected area (leaf, spot, stem…)</string>
+    <string name="disease_eppo_link">View EPPO datasheet →</string>
 </resources>
