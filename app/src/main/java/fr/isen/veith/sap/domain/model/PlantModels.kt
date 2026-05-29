@@ -2,9 +2,9 @@ package fr.isen.veith.sap.domain.model
 
 // ── Données capteurs du pot ───────────────────────────────────────────
 data class SensorData(
-    val humidity: Float,
+    val humidity: Float,        // valeur représentative = moyenne des 2 sondes sol
     val luminosity: Float,
-    val temperature: Float,
+    val temperature: Float,     // valeur représentative = moyenne des 2 sondes temp
     val timestamp: Long = System.currentTimeMillis()
 )
 

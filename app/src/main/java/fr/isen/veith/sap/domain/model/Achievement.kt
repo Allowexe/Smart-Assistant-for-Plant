@@ -18,25 +18,19 @@ object Achievements {
             id             = "first_pot",
             titleRes       = R.string.achievement_first_pot_title,
             descriptionRes = R.string.achievement_first_pot_desc,
-            emoji          = "🪴",
-            isUnlocked     = true,
-            unlockedAt     = System.currentTimeMillis() - 86400000L * 10
+            emoji          = "🪴"
         ),
         Achievement(
             id             = "first_plant",
             titleRes       = R.string.achievement_botanist_title,
             descriptionRes = R.string.achievement_botanist_desc,
-            emoji          = "🌿",
-            isUnlocked     = true,
-            unlockedAt     = System.currentTimeMillis() - 86400000L * 8
+            emoji          = "🌿"
         ),
         Achievement(
             id             = "watering",
             titleRes       = R.string.achievement_watering_title,
             descriptionRes = R.string.achievement_watering_desc,
-            emoji          = "💧",
-            isUnlocked     = true,
-            unlockedAt     = System.currentTimeMillis() - 86400000L * 2
+            emoji          = "💧"
         ),
         Achievement(
             id             = "sunshine",

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import fr.isen.veith.sap.data.achievements.AchievementsRepository
 import fr.isen.veith.sap.data.preferences.AppLanguage
 import fr.isen.veith.sap.data.preferences.AppPreferencesRepository
 import fr.isen.veith.sap.data.preferences.AppTheme
@@ -30,7 +31,8 @@ data class SettingsUiState(
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val prefsRepo = AppPreferencesRepository(application)
+    private val prefsRepo        = AppPreferencesRepository(application)
+    private val achievementsRepo = AchievementsRepository(application)
 
     private val _uiState = MutableStateFlow(SettingsUiState())
     val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
@@ -52,6 +54,13 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
                         notificationsEnabled = prefs.notificationsEnabled
                     )
                 }
+            }
+        }
+
+        // Live achievement unlock state
+        viewModelScope.launch {
+            achievementsRepo.achievements.collect { list ->
+                _uiState.update { it.copy(achievements = list) }
             }
         }
     }

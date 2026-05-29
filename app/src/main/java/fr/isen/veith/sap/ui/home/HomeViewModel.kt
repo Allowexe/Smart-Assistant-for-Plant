@@ -3,6 +3,7 @@ package fr.isen.veith.sap.ui.home
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import fr.isen.veith.sap.data.achievements.AchievementsRepository
 import fr.isen.veith.sap.data.influxdb.InfluxRepository
 import fr.isen.veith.sap.data.preferences.AppPreferencesRepository
 import fr.isen.veith.sap.domain.model.Plant
@@ -35,8 +36,9 @@ data class HomeUiState(
 
 class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val influx = InfluxRepository()
-    private val prefs  = AppPreferencesRepository(app)
+    private val influx       = InfluxRepository()
+    private val prefs        = AppPreferencesRepository(app)
+    private val achievements = AchievementsRepository(app)
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -47,6 +49,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         // Sync plants map + username from DataStore
         viewModelScope.launch {
             prefs.preferences.collect { p ->
+                achievements.recordPlants(p.savedPlants.values)
                 _uiState.update { state ->
                     val plant = p.savedPlants[state.selectedPotId]
                     state.copy(
@@ -66,6 +69,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             try {
                 val ids = influx.fetchPlantIds()
                 if (ids.isNotEmpty()) {
+                    achievements.recordPairedPots(ids)
                     _uiState.update { it.copy(availablePotIds = ids, selectedPotId = ids.first()) }
                     startRefreshing()
                 }
@@ -108,21 +112,25 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         try {
             val env      = influx.fetchEnvironment(potId)
             val spectrum = influx.fetchSpectrum(potId)
+            val soils = listOf(env.soil1, env.soil2).filter { it > 0f }
+            val temps = listOf(env.tempShtc3, env.tempBmp180).filter { it != 0f }
             val data = SensorData(
-                humidity    = (env.soil1 + env.soil2) / 2f,
-                temperature = env.tempShtc3,
+                humidity    = if (soils.isNotEmpty()) soils.average().toFloat() else 0f,
+                temperature = if (temps.isNotEmpty()) temps.average().toFloat() else env.tempShtc3,
                 luminosity  = spectrum.luminosity
             )
+            val plant  = _uiState.value.activePlant
+            val health = if (plant != null) computeHealth(data, plant) else 0f
             _uiState.update { state ->
-                val plant = state.activePlant
                 state.copy(
                     sensorData      = data,
                     mood            = if (plant != null) PlantMood.from(data, plant) else PlantMood.HAPPY,
-                    healthScore     = if (plant != null) computeHealth(data, plant) else 0f,
+                    healthScore     = health,
                     isInfluxLoading = false,
                     influxError     = null
                 )
             }
+            if (plant != null) achievements.recordHealthSample(data, plant, health)
         } catch (e: Exception) {
             _uiState.update { it.copy(isInfluxLoading = false, influxError = e.message) }
         }
@@ -132,19 +140,22 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             while (true) {
                 delay(10_000)
+                val prev = _uiState.value.sensorData
+                val d = prev.copy(
+                    humidity    = (prev.humidity + (-2..2).randomInt()).coerceIn(0f, 100f),
+                    luminosity  = (prev.luminosity + (-200..200).randomInt()).coerceAtLeast(0f),
+                    temperature = prev.temperature + (-0.5f..0.5f).randomFloat()
+                )
+                val plant  = _uiState.value.activePlant
+                val health = if (plant != null) computeHealth(d, plant) else 0f
                 _uiState.update { state ->
-                    val d = state.sensorData.copy(
-                        humidity    = (state.sensorData.humidity + (-2..2).randomInt()).coerceIn(0f, 100f),
-                        luminosity  = (state.sensorData.luminosity + (-200..200).randomInt()).coerceAtLeast(0f),
-                        temperature = state.sensorData.temperature + (-0.5f..0.5f).randomFloat()
-                    )
-                    val plant = state.activePlant
                     state.copy(
                         sensorData  = d,
                         mood        = if (plant != null) PlantMood.from(d, plant) else PlantMood.HAPPY,
-                        healthScore = if (plant != null) computeHealth(d, plant) else 0f
+                        healthScore = health
                     )
                 }
+                if (plant != null) achievements.recordHealthSample(d, plant, health)
             }
         }
     }

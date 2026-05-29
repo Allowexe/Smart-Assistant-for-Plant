@@ -32,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.isen.veith.sap.R
 import fr.isen.veith.sap.domain.model.Plant
 import fr.isen.veith.sap.domain.model.PlantMood
+import fr.isen.veith.sap.domain.model.SensorData
 import fr.isen.veith.sap.ui.theme.*
 
 @Composable
@@ -73,10 +74,8 @@ fun HomeScreen(
             Spacer(Modifier.height(16.dp))
 
             SensorSection(
-                humidity    = state.sensorData.humidity,
-                luminosity  = state.sensorData.luminosity,
-                temperature = state.sensorData.temperature,
-                plant       = state.activePlant
+                sensorData = state.sensorData,
+                plant      = state.activePlant
             )
 
             Spacer(Modifier.height(20.dp))
@@ -335,11 +334,13 @@ private fun HomeHeader(
 // ─────────────────────────────────────────────────────────────────────
 @Composable
 private fun SensorSection(
-    humidity: Float,
-    luminosity: Float,
-    temperature: Float,
+    sensorData: SensorData,
     plant: Plant?
 ) {
+    val humidity    = sensorData.humidity
+    val luminosity  = sensorData.luminosity
+    val temperature = sensorData.temperature
+
     val humidAlert = plant != null && (humidity < plant.humidityMin || humidity > plant.humidityMax)
     val luxAlert   = plant != null && (luminosity < plant.luxMin || luminosity > plant.luxMax)
     val tempAlert  = plant != null && (temperature < plant.tempMin || temperature > plant.tempMax)
@@ -362,7 +363,8 @@ private fun SensorSection(
         )
         SensorCard(
             label    = stringResource(R.string.sensor_light),
-            value    = "${(luminosity / 1000).let { "%.1f".format(it) }}k lux",
+            value    = if (luminosity < 1000f) "${luminosity.toInt()} lux"
+                       else "${"%.1f".format(luminosity / 1000f)}k lux",
             icon     = "☀️",
             progress = (luminosity / 10000f).coerceIn(0f, 1f),
             type     = SensorType.LUMINOSITY,
