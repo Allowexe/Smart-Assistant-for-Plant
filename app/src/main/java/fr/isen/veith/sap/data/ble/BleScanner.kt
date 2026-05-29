@@ -62,7 +62,7 @@ class BleScanner(context: Context) {
         @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             val name = result.device.name ?: return
-            if (!name.startsWith("ST67W61_BLE_")) return
+            if (!name.startsWith("ST")) return
             val device = BleDevice(
                 address = result.device.address,
                 name    = name,

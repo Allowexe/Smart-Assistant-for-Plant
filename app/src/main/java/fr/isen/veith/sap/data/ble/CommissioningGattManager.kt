@@ -4,6 +4,9 @@ import android.Manifest
 import android.bluetooth.*
 import android.content.Context
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import androidx.annotation.RequiresPermission
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -80,11 +83,23 @@ class CommissioningGattManager(private val context: Context) {
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     fun connect(device: BleDevice) {
+        // Fermer l'ancienne instance GATT avant d'en créer une nouvelle
+        // (évite les instances orphelines qui interceptent les callbacks BLE)
+        gatt?.close()
+        gatt = null
         synchronized(lock) { writeQueue.clear(); writeBusy = false }
         _state.value = CommissioningState.Connecting
         val adapter = (context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
-        gatt = adapter.getRemoteDevice(device.address)
-            .connectGatt(context, false, gattCallback, BluetoothDevice.TRANSPORT_LE)
+        val btDevice = adapter.getRemoteDevice(device.address)
+        val mainHandler = Handler(Looper.getMainLooper())
+        // Workaround Samsung BLE bug : sans Handler(mainLooper), onCharacteristicChanged
+        // n'est jamais appelé sur les Galaxy (callbacks sur Binder thread ignorés)
+        gatt = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            btDevice.connectGatt(context, false, gattCallback,
+                BluetoothDevice.TRANSPORT_LE, BluetoothDevice.PHY_LE_1M_MASK, mainHandler)
+        } else {
+            btDevice.connectGatt(context, false, gattCallback, BluetoothDevice.TRANSPORT_LE)
+        }
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
@@ -162,13 +177,18 @@ class CommissioningGattManager(private val context: Context) {
         val g    = gatt ?: return
         val svc  = g.getService(CommissioningUuids.SERVICE) ?: return
         val chr  = svc.getCharacteristic(uuid) ?: run { enableNextNotify(); return }
-        g.setCharacteristicNotification(chr, true)
+        val notifOk = g.setCharacteristicNotification(chr, true)
+        val props = chr.properties
+        val isIndicate = props and BluetoothGattCharacteristic.PROPERTY_INDICATE != 0
+        val cccdVal = if (isIndicate) BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
+                      else BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+        Log.d("SAP_BLE", "setCharacteristicNotification $uuid → $notifOk props=0x${props.toString(16)} cccd=${if (isIndicate) "INDICATE" else "NOTIFY"}")
         val desc = chr.getDescriptor(CommissioningUuids.CCCD) ?: run { enableNextNotify(); return }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            g.writeDescriptor(desc, BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE)
+            g.writeDescriptor(desc, cccdVal)
         } else {
             @Suppress("DEPRECATION")
-            desc.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+            desc.value = cccdVal
             @Suppress("DEPRECATION")
             g.writeDescriptor(desc)
         }
@@ -176,22 +196,32 @@ class CommissioningGattManager(private val context: Context) {
 
     // ── Parsing AP struct (little-endian, voir spec firmware) ─────────
 
+    // Format ST67W6X : [ssid_len:1B][channel:1B][rssi:1B signed][security:1B][ssid:ssid_len B]
     private fun parseAP(raw: ByteArray): WifiAP? {
-        if (raw.size < 9) return null
+        if (raw.size < 5) return null
         val ssidLen = raw[0].toInt() and 0xFF
         val channel = raw[1].toInt() and 0xFF
-        val rssi    = ByteBuffer.wrap(raw, 2, 2).order(ByteOrder.LITTLE_ENDIAN).short.toInt()
-        val secVal  = ByteBuffer.wrap(raw, 4, 4).order(ByteOrder.LITTLE_ENDIAN).int
-        val ssidEnd = minOf(8 + ssidLen, raw.size)
-        val ssid    = if (ssidEnd > 8) String(raw, 8, ssidEnd - 8, Charsets.UTF_8).trimEnd(' ')
-                      else ""
+        val rssi    = raw[2].toInt().let { if (it > 127) it - 256 else it }
+        val secVal  = raw[3].toInt() and 0xFF
+        val ssidEnd = minOf(4 + ssidLen, raw.size)
+        if (ssidEnd <= 4) return null
+        val ssid = String(raw, 4, ssidEnd - 4, Charsets.UTF_8).trim()
         if (ssid.isBlank()) return null
         return WifiAP(ssid = ssid, rssi = rssi, channel = channel, security = WifiSecurity.from(secVal))
     }
 
     private fun handleNotification(uuid: UUID, value: ByteArray) {
+        Log.d("SAP_BLE", "Notif uuid=$uuid size=${value.size} bytes=${value.joinToString(" ") { "%02X".format(it) }}")
         when (uuid) {
-            CommissioningUuids.AP_LIST -> parseAP(value)?.let { _apEvent.tryEmit(it) }
+            CommissioningUuids.AP_LIST -> {
+                val ap = parseAP(value)
+                if (ap != null) {
+                    Log.d("SAP_BLE", "AP: ssid=${ap.ssid} rssi=${ap.rssi} ch=${ap.channel} sec=${ap.security}")
+                    _apEvent.tryEmit(ap)
+                } else {
+                    Log.w("SAP_BLE", "AP parse FAILED: ${value.size}B ${value.joinToString(" ") { "%02X".format(it) }}")
+                }
+            }
             CommissioningUuids.MONITORING -> handleMonitoring(value)
         }
     }
@@ -217,6 +247,7 @@ class CommissioningGattManager(private val context: Context) {
 
         @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
+            Log.d("SAP_BLE", "onConnectionStateChange status=$status newState=$newState")
             if (status != BluetoothGatt.GATT_SUCCESS) {
                 _state.value = CommissioningState.Error("Erreur GATT $status")
                 gatt.close()
@@ -225,7 +256,16 @@ class CommissioningGattManager(private val context: Context) {
             when (newState) {
                 BluetoothProfile.STATE_CONNECTED -> {
                     _state.value = CommissioningState.DiscoveringServices
-                    gatt.discoverServices()
+                    try {
+                        val refresh = gatt.javaClass.getMethod("refresh")
+                        refresh.invoke(gatt)
+                        Log.d("SAP_BLE", "GATT cache refreshed")
+                    } catch (e: Exception) {
+                        Log.w("SAP_BLE", "gatt.refresh() indisponible: ${e.message}")
+                    }
+                    // Négocier le MTU avant la découverte — certains stacks BLE ignorent
+                    // les notifications si le MTU par défaut (23 bytes) n'est pas négocié
+                    gatt.requestMtu(512)
                 }
                 BluetoothProfile.STATE_DISCONNECTED -> {
                     if (_state.value !is CommissioningState.Done &&
@@ -237,23 +277,34 @@ class CommissioningGattManager(private val context: Context) {
         }
 
         @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
+        override fun onMtuChanged(gatt: BluetoothGatt, mtu: Int, status: Int) {
+            Log.d("SAP_BLE", "onMtuChanged mtu=$mtu status=$status")
+            gatt.discoverServices()
+        }
+
+        @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
+            Log.d("SAP_BLE", "onServicesDiscovered status=$status")
             if (status != BluetoothGatt.GATT_SUCCESS ||
                 gatt.getService(CommissioningUuids.SERVICE) == null) {
+                val uuids = gatt.services.map { it.uuid }
+                Log.e("SAP_BLE", "Service introuvable. Services dispo: $uuids")
                 _state.value = CommissioningState.Error("Service commissioning introuvable sur cet appareil")
                 return
             }
-            // Activer les notifications en séquence : AP_LIST puis MONITORING
+            Log.d("SAP_BLE", "Service trouvé. Activation notifications AP_LIST + MONITORING")
             pendingNotifyUuids.clear()
             pendingNotifyUuids.addAll(listOf(CommissioningUuids.AP_LIST, CommissioningUuids.MONITORING))
             enableNextNotify()
         }
 
-        // Chaque writeDescriptor termine → on passe au suivant
         @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
         override fun onDescriptorWrite(
             gatt: BluetoothGatt, descriptor: BluetoothGattDescriptor, status: Int
-        ) = enableNextNotify()
+        ) {
+            Log.d("SAP_BLE", "onDescriptorWrite status=$status char=${descriptor.characteristic.uuid}")
+            enableNextNotify()
+        }
 
         // ACK d'un writeCharacteristic → drainer la queue
         override fun onCharacteristicWrite(
@@ -267,12 +318,18 @@ class CommissioningGattManager(private val context: Context) {
 
         override fun onCharacteristicChanged(
             gatt: BluetoothGatt, char: BluetoothGattCharacteristic, value: ByteArray
-        ) = handleNotification(char.uuid, value)
+        ) {
+            Log.d("SAP_BLE", "onCharacteristicChanged (API33+) uuid=${char.uuid}")
+            handleNotification(char.uuid, value)
+        }
 
         @Deprecated("Deprecated in Java")
         @Suppress("DEPRECATION")
         override fun onCharacteristicChanged(
             gatt: BluetoothGatt, char: BluetoothGattCharacteristic
-        ) = handleNotification(char.uuid, char.value)
+        ) {
+            Log.d("SAP_BLE", "onCharacteristicChanged (deprecated) uuid=${char.uuid}")
+            handleNotification(char.uuid, char.value)
+        }
     }
 }
