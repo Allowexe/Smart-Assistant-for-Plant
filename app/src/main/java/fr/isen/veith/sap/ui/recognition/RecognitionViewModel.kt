@@ -11,6 +11,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import fr.isen.veith.sap.data.api.DiseaseState
 import fr.isen.veith.sap.data.api.IdentificationResult
 import fr.isen.veith.sap.data.api.IdentificationState
 import fr.isen.veith.sap.data.api.PlantNetRepository
@@ -29,6 +30,11 @@ data class RecognitionUiState(
 
     // Identification
     val identificationState: IdentificationState = IdentificationState.Idle,
+
+    // Diagnostic maladie
+    val diseaseState: DiseaseState = DiseaseState.Idle,
+    val isDiseaseCapture: Boolean  = false,   // viewfinder dédié à la photo maladie
+    val diseaseOnlyMode: Boolean   = false,   // entré directement depuis le home (sans identif plante)
 
     // Résultat sauvegardé
     val savedPlant: Plant?              = null,
@@ -62,7 +68,7 @@ class RecognitionViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     // ── Capture photo ─────────────────────────────────────────────────
-    fun capturePhoto(imageCapture: ImageCapture) {
+    fun capturePhoto(imageCapture: ImageCapture, forDisease: Boolean = false) {
         val context = getApplication<Application>()
         _uiState.update { it.copy(isCapturing = true) }
 
@@ -87,15 +93,23 @@ class RecognitionViewModel(application: Application) : AndroidViewModel(applicat
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val uri = output.savedUri
-                    _uiState.update {
-                        it.copy(
-                            capturedImageUri = uri,
-                            isCapturing      = false,
-                            identificationState = IdentificationState.Idle
-                        )
+                    if (forDisease) {
+                        // Photo dédiée maladie : ne touche pas la photo/résultats plante
+                        _uiState.update {
+                            it.copy(isCapturing = false, isDiseaseCapture = false)
+                        }
+                        uri?.let { detectDisease(it) }
+                    } else {
+                        _uiState.update {
+                            it.copy(
+                                capturedImageUri = uri,
+                                isCapturing      = false,
+                                identificationState = IdentificationState.Idle
+                            )
+                        }
+                        // Lancer l'identification automatiquement
+                        uri?.let { identify(it) }
                     }
-                    // Lancer l'identification automatiquement
-                    uri?.let { identify(it) }
                 }
 
                 override fun onError(exception: ImageCaptureException) {
@@ -127,11 +141,39 @@ class RecognitionViewModel(application: Application) : AndroidViewModel(applicat
         _uiState.value.capturedImageUri?.let { identify(it) }
     }
 
+    // ── Diagnostic maladie ────────────────────────────────────────────
+    /** Entrée directe depuis le home : scan maladie autonome. */
+    fun initDiseaseOnly() {
+        if (_uiState.value.diseaseOnlyMode) return
+        _uiState.update { it.copy(diseaseOnlyMode = true, isDiseaseCapture = true, diseaseState = DiseaseState.Idle) }
+    }
+
+    /** Ouvre le viewfinder dédié à la photo maladie. */
+    fun startDiseaseCapture() {
+        _uiState.update { it.copy(isDiseaseCapture = true, diseaseState = DiseaseState.Idle) }
+    }
+
+    /** Annule la capture maladie et revient aux résultats. */
+    fun cancelDiseaseCapture() {
+        _uiState.update { it.copy(isDiseaseCapture = false) }
+    }
+
+    /** Lance le diagnostic sur la photo maladie fraîchement prise. */
+    fun detectDisease(uri: Uri) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(diseaseState = DiseaseState.Analyzing) }
+            val result = repository.detectDisease(getApplication(), uri)
+            _uiState.update { it.copy(diseaseState = result) }
+        }
+    }
+
     fun resetCapture() {
         _uiState.update {
             it.copy(
                 capturedImageUri    = null,
                 identificationState = IdentificationState.Idle,
+                diseaseState        = DiseaseState.Idle,
+                isDiseaseCapture    = false,
                 selectedResultIndex = 0
             )
         }

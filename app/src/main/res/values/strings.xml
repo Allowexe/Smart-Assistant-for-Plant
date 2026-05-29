@@ -53,6 +53,8 @@
     <!-- Boutons home -->
     <string name="btn_identify_plant">Identifier une plante</string>
     <string name="btn_pair_pot">Appairer un pot</string>
+    <string name="btn_home_identify">Identifier</string>
+    <string name="btn_home_disease">Maladie</string>
 
     <!-- ── Achievements ────────────────────────────────────────────────── -->
     <string name="achievement_first_pot_title">Premier pot</string>
@@ -146,4 +148,13 @@
     <string name="notif_help_title">%s a besoin d\'aide 🌱</string>
     <string name="notif_help_concerned">%s a besoin d\'attention — vérifie ses capteurs.</string>
     <string name="notif_help_sad">%s souffre, agis vite !</string>
+
+    <!-- ── Maladies ───────────────────────────────────────────────────── -->
+    <string name="btn_scan_disease">Scanner les maladies</string>
+    <string name="disease_section_title">DIAGNOSTIC SANTÉ</string>
+    <string name="disease_analyzing">Analyse des maladies…</string>
+    <string name="disease_none">Aucune maladie détectée 🌿</string>
+    <string name="disease_capture_title">Diagnostic maladie</string>
+    <string name="disease_capture_hint">Cadrez la zone malade (feuille, tache, tige…)</string>
+    <string name="disease_eppo_link">Voir la fiche EPPO →</string>
 </resources>

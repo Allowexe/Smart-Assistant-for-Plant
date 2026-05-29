@@ -10,12 +10,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Sensors
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.Alignment
@@ -43,6 +45,7 @@ fun HomeScreen(
     onNavigateToScan: () -> Unit,
     onNavigateToDashboard: () -> Unit,
     onNavigateToRecognition: (potId: String) -> Unit,
+    onNavigateToDiseaseScan: (potId: String) -> Unit = {},
     viewModel: HomeViewModel = viewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -52,6 +55,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .windowInsetsPadding(WindowInsets.statusBars)
+            .windowInsetsPadding(WindowInsets.navigationBars)
     ) {
         Column(
             modifier = Modifier
@@ -105,20 +109,28 @@ fun HomeScreen(
                 Spacer(Modifier.height(20.dp))
             }
 
-            Row(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    .padding(horizontal = 16.dp)
             ) {
+                // Appairage : pleine largeur
                 PairingButton(
                     onClick  = onNavigateToScan,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.fillMaxWidth()
                 )
-                RecognitionButton(
-                    onClick  = { onNavigateToRecognition(state.selectedPotId) },
-                    modifier = Modifier.weight(1f)
-                )
+                Spacer(Modifier.height(10.dp))
+                // Identification plante | Scan maladie : deux moitiés
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    RecognitionButton(
+                        onClick  = { onNavigateToRecognition(state.selectedPotId) },
+                        modifier = Modifier.weight(1f)
+                    )
+                    DiseaseButton(
+                        onClick  = { onNavigateToDiseaseScan(state.selectedPotId) },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
 
             Spacer(Modifier.height(32.dp))
@@ -630,11 +642,36 @@ private fun RecognitionButton(onClick: () -> Unit, modifier: Modifier = Modifier
         modifier = modifier.fillMaxWidth().height(54.dp),
         shape    = RoundedCornerShape(16.dp),
         colors   = ButtonDefaults.buttonColors(containerColor = Orange400, contentColor = Color.White),
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
+        contentPadding = PaddingValues(horizontal = 8.dp)
     ) {
-        Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(20.dp))
-        Spacer(Modifier.width(8.dp))
-        Text(text = stringResource(R.string.btn_identify_plant), style = MaterialTheme.typography.bodyLarge)
+        Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
+        Spacer(Modifier.width(6.dp))
+        Text(
+            text     = stringResource(R.string.btn_home_identify),
+            style    = MaterialTheme.typography.bodyMedium,
+            maxLines = 1
+        )
+    }
+}
+
+@Composable
+private fun DiseaseButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    Button(
+        onClick  = onClick,
+        modifier = modifier.fillMaxWidth().height(54.dp),
+        shape    = RoundedCornerShape(16.dp),
+        colors   = ButtonDefaults.buttonColors(containerColor = Color(0xFFCF6679), contentColor = Color.White),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
+        contentPadding = PaddingValues(horizontal = 8.dp)
+    ) {
+        Icon(Icons.Default.HealthAndSafety, contentDescription = null, modifier = Modifier.size(18.dp))
+        Spacer(Modifier.width(6.dp))
+        Text(
+            text     = stringResource(R.string.btn_home_disease),
+            style    = MaterialTheme.typography.bodyMedium,
+            maxLines = 1
+        )
     }
 }
 

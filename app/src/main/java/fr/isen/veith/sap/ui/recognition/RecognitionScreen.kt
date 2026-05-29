@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import fr.isen.veith.sap.R
@@ -40,8 +41,11 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import fr.isen.veith.sap.data.api.DiseaseResult
+import fr.isen.veith.sap.data.api.DiseaseState
 import fr.isen.veith.sap.data.api.IdentificationResult
 import fr.isen.veith.sap.data.api.IdentificationState
+import fr.isen.veith.sap.domain.model.DiseaseAdvice
 import fr.isen.veith.sap.ui.theme.*
 import kotlin.math.roundToInt
 
@@ -54,12 +58,18 @@ import kotlin.math.roundToInt
 @Composable
 fun RecognitionScreen(
     potId: String = "",
+    startInDiseaseMode: Boolean = false,
     onPlantSaved: () -> Unit = {},
     onBack: () -> Unit = {},
     viewModel: RecognitionViewModel = viewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
+    // Entrée directe en scan maladie (depuis le home)
+    LaunchedEffect(Unit) {
+        if (startInDiseaseMode) viewModel.initDiseaseOnly()
+    }
 
     // Launcher permission caméra
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -90,23 +100,43 @@ fun RecognitionScreen(
                 onRequest = { permissionLauncher.launch(Manifest.permission.CAMERA) },
                 onBack    = onBack
             )
-        } else if (state.capturedImageUri == null) {
-            // ── Viewfinder caméra ──────────────────────────────────
+        } else if (state.isDiseaseCapture) {
+            // ── Viewfinder dédié photo maladie ─────────────────────
             CameraViewfinder(
-                onCapture = viewModel::capturePhoto,
+                onCapture   = { ic -> viewModel.capturePhoto(ic, forDisease = true) },
                 isCapturing = state.isCapturing,
-                onBack    = onBack
+                onBack      = if (state.diseaseOnlyMode) onBack else viewModel::cancelDiseaseCapture,
+                title       = stringResource(R.string.disease_capture_title),
+                hint        = stringResource(R.string.disease_capture_hint)
+            )
+        } else if (state.diseaseOnlyMode) {
+            // ── Résultats scan maladie autonome ────────────────────
+            DiseaseOnlyScreen(
+                diseaseState = state.diseaseState,
+                onRescan     = viewModel::startDiseaseCapture,
+                onBack       = onBack
+            )
+        } else if (state.capturedImageUri == null) {
+            // ── Viewfinder caméra (identification) ─────────────────
+            CameraViewfinder(
+                onCapture   = { ic -> viewModel.capturePhoto(ic) },
+                isCapturing = state.isCapturing,
+                onBack      = onBack,
+                title       = stringResource(R.string.recognition_title),
+                hint        = stringResource(R.string.recognition_hint)
             )
         } else {
             // ── Résultats d'identification ─────────────────────────
             ResultsScreen(
                 imageUri            = state.capturedImageUri!!,
                 identificationState = state.identificationState,
+                diseaseState        = state.diseaseState,
                 selectedIndex       = state.selectedResultIndex,
                 onSelectResult      = viewModel::selectResult,
                 onRetry             = viewModel::retryIdentification,
                 onRetake            = viewModel::resetCapture,
                 onSave              = { viewModel.savePlant(potId) },
+                onScanDisease       = viewModel::startDiseaseCapture,
                 onBack              = onBack
             )
         }
@@ -130,7 +160,9 @@ fun RecognitionScreen(
 private fun CameraViewfinder(
     onCapture: (ImageCapture) -> Unit,
     isCapturing: Boolean,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    title: String,
+    hint: String
 ) {
     val context       = LocalContext.current
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
@@ -192,7 +224,7 @@ private fun CameraViewfinder(
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = Color.White)
             }
             Text(
-                text     = stringResource(R.string.recognition_title),
+                text     = title,
                 color    = Color.White,
                 style    = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.align(Alignment.Center)
@@ -204,7 +236,7 @@ private fun CameraViewfinder(
 
         // Conseil
         Text(
-            text     = stringResource(R.string.recognition_hint),
+            text     = hint,
             color    = Color.White.copy(alpha = 0.75f),
             style    = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
@@ -304,11 +336,13 @@ private fun FocusFrame(modifier: Modifier = Modifier) {
 private fun ResultsScreen(
     imageUri: Uri,
     identificationState: IdentificationState,
+    diseaseState: DiseaseState,
     selectedIndex: Int,
     onSelectResult: (Int) -> Unit,
     onRetry: () -> Unit,
     onRetake: () -> Unit,
     onSave: () -> Unit,
+    onScanDisease: () -> Unit,
     onBack: () -> Unit
 ) {
     Column(
@@ -423,9 +457,217 @@ private fun ResultsScreen(
                     }
                 }
 
+                Spacer(Modifier.height(12.dp))
+
+                // ── Bouton diagnostic maladie ─────────────────────────
+                OutlinedButton(
+                    onClick  = onScanDisease,
+                    enabled  = diseaseState !is DiseaseState.Analyzing,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .height(50.dp),
+                    shape  = RoundedCornerShape(14.dp),
+                    border = BorderStroke(1.dp, Color(0xFFCF6679).copy(alpha = 0.7f))
+                ) {
+                    Icon(Icons.Default.HealthAndSafety, null,
+                        tint = Color(0xFFCF6679), modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.btn_scan_disease), color = Color(0xFFCF6679))
+                }
+
+                // ── Résultats du diagnostic ───────────────────────────
+                DiseaseSection(
+                    state    = diseaseState,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+
                 Spacer(Modifier.height(32.dp))
             }
         }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// Écran scan maladie autonome (entrée depuis le home)
+// ─────────────────────────────────────────────────────────────────────
+@Composable
+private fun DiseaseOnlyScreen(
+    diseaseState: DiseaseState,
+    onRescan: () -> Unit,
+    onBack: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(rememberScrollState())
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Brush.verticalGradient(listOf(Green900, Color(0xFF253D25))))
+                .padding(horizontal = 8.dp, vertical = 12.dp)
+        ) {
+            IconButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterStart)) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = Green200)
+            }
+            Text(
+                text     = stringResource(R.string.disease_capture_title),
+                style    = MaterialTheme.typography.titleLarge,
+                color    = Green50,
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
+
+        DiseaseSection(
+            state    = diseaseState,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
+        Spacer(Modifier.height(20.dp))
+
+        OutlinedButton(
+            onClick  = onRescan,
+            enabled  = diseaseState !is DiseaseState.Analyzing,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .height(50.dp),
+            shape  = RoundedCornerShape(14.dp),
+            border = BorderStroke(1.dp, Color(0xFFCF6679).copy(alpha = 0.7f))
+        ) {
+            Icon(Icons.Default.HealthAndSafety, null,
+                tint = Color(0xFFCF6679), modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.btn_scan_disease), color = Color(0xFFCF6679))
+        }
+
+        Spacer(Modifier.height(32.dp))
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// Section diagnostic maladie
+// ─────────────────────────────────────────────────────────────────────
+@Composable
+private fun DiseaseSection(state: DiseaseState, modifier: Modifier = Modifier) {
+    when (state) {
+        is DiseaseState.Idle -> Unit
+
+        is DiseaseState.Analyzing -> {
+            Row(
+                modifier = modifier.fillMaxWidth().padding(top = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                CircularProgressIndicator(
+                    color = Color(0xFFCF6679), modifier = Modifier.size(20.dp), strokeWidth = 2.dp
+                )
+                Spacer(Modifier.width(10.dp))
+                Text(
+                    text  = stringResource(R.string.disease_analyzing),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                )
+            }
+        }
+
+        is DiseaseState.Error -> {
+            Text(
+                text     = state.message,
+                style    = MaterialTheme.typography.bodyMedium,
+                color    = Color(0xFFCF6679),
+                textAlign = TextAlign.Center,
+                modifier = modifier.fillMaxWidth().padding(top = 16.dp)
+            )
+        }
+
+        is DiseaseState.Success -> {
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text     = stringResource(R.string.disease_section_title),
+                style    = MaterialTheme.typography.labelSmall,
+                color    = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.45f),
+                modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)
+            )
+            if (state.results.isEmpty()) {
+                Text(
+                    text     = stringResource(R.string.disease_none),
+                    style    = MaterialTheme.typography.bodyMedium,
+                    color    = Green400,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            } else {
+                state.results.forEach { disease ->
+                    DiseaseRow(disease = disease, modifier = Modifier.padding(vertical = 4.dp))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DiseaseRow(disease: DiseaseResult, modifier: Modifier = Modifier) {
+    val pct = (disease.confidence * 100).roundToInt()
+    val severity = when {
+        pct >= 70 -> Color(0xFFCF6679)
+        pct >= 40 -> Orange400
+        else      -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+    }
+    val tip        = DiseaseAdvice.tip(disease.name) ?: DiseaseAdvice.tip(disease.code)
+    val uriHandler = LocalUriHandler.current
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .border(0.5.dp, severity.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
+            .padding(12.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("🦠", fontSize = 18.sp)
+            Spacer(Modifier.width(10.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text  = disease.name,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text  = disease.code,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                )
+            }
+            Text(
+                text       = "$pct%",
+                style      = MaterialTheme.typography.bodyMedium,
+                color      = severity,
+                fontWeight = FontWeight.Medium
+            )
+        }
+
+        // Conseil de traitement (si reconnu)
+        if (tip != null) {
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text  = "💡 $tip",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+            )
+        }
+
+        // Lien fiche EPPO
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text     = stringResource(R.string.disease_eppo_link),
+            style    = MaterialTheme.typography.labelSmall,
+            color    = Green400,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.clickable { uriHandler.openUri(DiseaseAdvice.eppoUrl(disease.code)) }
+        )
     }
 }
 

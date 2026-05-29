@@ -28,6 +28,20 @@ sealed class IdentificationState {
     data class Error(val message: String)              : IdentificationState()
 }
 
+// ── Résultat de diagnostic maladie ────────────────────────────────────
+data class DiseaseResult(
+    val name: String,            // libellé lisible (description) ou code EPPO
+    val code: String,            // code EPPO brut
+    val confidence: Float
+)
+
+sealed class DiseaseState {
+    object Idle                                      : DiseaseState()
+    object Analyzing                                 : DiseaseState()
+    data class Success(val results: List<DiseaseResult>) : DiseaseState()
+    data class Error(val message: String)            : DiseaseState()
+}
+
 // ── Repository ────────────────────────────────────────────────────────
 class PlantNetRepository {
 
@@ -76,6 +90,57 @@ class PlantNetRepository {
             IdentificationState.Error("Pas de connexion internet")
         } catch (e: Exception) {
             IdentificationState.Error("Erreur inattendue: ${e.localizedMessage}")
+        }
+    }
+
+    // ── Diagnostic maladie (v2/diseases/identify) ─────────────────────
+    suspend fun detectDisease(
+        context: Context,
+        imageUri: Uri,
+        lang: String = "fr"
+    ): DiseaseState {
+        return try {
+            val imageBytes = compressImage(context, imageUri)
+                ?: return DiseaseState.Error("Impossible de lire l'image")
+
+            val imagePart = MultipartBody.Part.createFormData(
+                name     = "images",
+                filename = "plant.jpg",
+                body     = imageBytes.toRequestBody("image/jpeg".toMediaType())
+            )
+            val organBody = "auto".toRequestBody("text/plain".toMediaTypeOrNull())
+
+            val response = PlantNetApi.service.identifyDisease(
+                images = listOf(imagePart),
+                organs = organBody,
+                lang   = lang,
+                apiKey = PlantNetApi.API_KEY
+            )
+
+            val results = response.results
+                ?.take(5)
+                ?.map {
+                    DiseaseResult(
+                        name       = it.description?.takeIf { d -> d.isNotBlank() } ?: it.name,
+                        code       = it.name,
+                        confidence = it.score.toFloat()
+                    )
+                }
+                ?: emptyList()
+
+            DiseaseState.Success(results)
+
+        } catch (e: retrofit2.HttpException) {
+            when (e.code()) {
+                401  -> DiseaseState.Error("Clé API invalide")
+                404  -> DiseaseState.Error("Aucune maladie reconnue sur cette espèce")
+                429  -> DiseaseState.Error("Quota API dépassé pour aujourd'hui")
+                else -> DiseaseState.Error("Erreur serveur (${e.code()})")
+            }
+        } catch (e: java.io.IOException) {
+            DiseaseState.Error("Pas de connexion internet")
+        } catch (e: Exception) {
+            DiseaseState.Error("Erreur inattendue: ${e.localizedMessage}")
         }
     }
 
