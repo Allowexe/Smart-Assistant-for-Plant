@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import fr.isen.veith.sap.data.achievements.AchievementsRepository
 import fr.isen.veith.sap.data.influxdb.InfluxRepository
 import fr.isen.veith.sap.data.preferences.AppPreferencesRepository
+import fr.isen.veith.sap.domain.model.LightSource
 import fr.isen.veith.sap.domain.model.Plant
 import fr.isen.veith.sap.domain.model.PlantMood
 import fr.isen.veith.sap.domain.model.SampleData
@@ -23,6 +24,7 @@ data class HomeUiState(
     val userName: String                    = "Jardinier",
     val plantsPerPot: Map<String, Plant>    = emptyMap(),
     val sensorData: SensorData              = SampleData.sensorData,
+    val lightSource: LightSource            = LightSource.UNKNOWN,
     val mood: PlantMood                     = PlantMood.HAPPY,
     val healthScore: Float                  = 0f,
     val availablePotIds: List<String>       = emptyList(),
@@ -121,9 +123,11 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             )
             val plant  = _uiState.value.activePlant
             val health = if (plant != null) computeHealth(data, plant) else 0f
+            val light  = LightSource.from(spectrum)
             _uiState.update { state ->
                 state.copy(
                     sensorData      = data,
+                    lightSource     = light,
                     mood            = if (plant != null) PlantMood.from(data, plant) else PlantMood.HAPPY,
                     healthScore     = health,
                     isInfluxLoading = false,

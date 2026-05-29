@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -30,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.isen.veith.sap.R
+import fr.isen.veith.sap.domain.model.LightSource
 import fr.isen.veith.sap.domain.model.Plant
 import fr.isen.veith.sap.domain.model.PlantMood
 import fr.isen.veith.sap.domain.model.SensorData
@@ -59,6 +61,7 @@ fun HomeScreen(
             HomeHeader(
                 userName         = state.userName,
                 mood             = state.mood,
+                lightSource      = state.lightSource,
                 activePlant      = state.activePlant,
                 availablePotIds  = state.availablePotIds,
                 selectedPotId    = state.selectedPotId,
@@ -143,6 +146,7 @@ fun HomeScreen(
 private fun HomeHeader(
     userName: String,
     mood: PlantMood,
+    lightSource: LightSource,
     activePlant: Plant?,
     availablePotIds: List<String>,
     selectedPotId: String,
@@ -303,10 +307,31 @@ private fun HomeHeader(
                 }
             }
 
-            MoodFace(
-                mood     = mood,
-                modifier = Modifier.size(72.dp)
-            )
+            // Visage + halo de source lumineuse (soleil / ampoule) en arrière-plan
+            Box(
+                modifier         = Modifier.size(96.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                val lightGlyph = when (lightSource) {
+                    LightSource.SUNLIGHT   -> "☀️"
+                    LightSource.ARTIFICIAL -> "💡"
+                    LightSource.UNKNOWN    -> null
+                }
+                if (lightGlyph != null) {
+                    Text(
+                        text     = lightGlyph,
+                        fontSize = 34.sp,
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .offset(y = (-16).dp)
+                            .alpha(0.6f)
+                    )
+                }
+                MoodFace(
+                    mood     = mood,
+                    modifier = Modifier.size(72.dp)
+                )
+            }
         }
 
         Spacer(Modifier.height(8.dp))
@@ -363,8 +388,11 @@ private fun SensorSection(
         )
         SensorCard(
             label    = stringResource(R.string.sensor_light),
-            value    = if (luminosity < 1000f) "${luminosity.toInt()} lux"
-                       else "${"%.1f".format(luminosity / 1000f)}k lux",
+            value    = when {
+                luminosity < 1000f   -> "${luminosity.toInt()} lux"
+                luminosity < 10000f  -> "${"%.1f".format(luminosity / 1000f)}k lux"
+                else                 -> "${(luminosity / 1000f).toInt()}k lux"
+            },
             icon     = "☀️",
             progress = (luminosity / 10000f).coerceIn(0f, 1f),
             type     = SensorType.LUMINOSITY,
