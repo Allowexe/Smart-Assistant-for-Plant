@@ -115,4 +115,7 @@ dependencies {
     // ── InfluxDB HTTP client ──────────────────────────────────────
     implementation(libs.okhttp)
 
+    // ── WorkManager (background plant-health checks) ──────────────
+    implementation(libs.androidx.work.runtime.ktx)
+
 }

@@ -27,6 +27,7 @@ navigationComposeVersion = "2.8.9"
 retrofit = "3.0.0"
 roomKtx = "2.8.4"
 roomRuntime = "2.8.4"
+workRuntime = "2.10.0"
 
 [libraries]
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCore" }
@@ -42,6 +43,7 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-navigation-compose-v289 = { module = "androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntime" }
 ble = { module = "no.nordicsemi.android:ble", version.ref = "ble" }
 ble-ktx = { module = "no.nordicsemi.android:ble-ktx", version.ref = "bleKtx" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }

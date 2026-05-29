@@ -139,4 +139,11 @@
     <string name="btn_allow_camera">Autoriser la caméra</string>
     <string name="save_success">« %s » enregistrée !</string>
     <string name="photo_error">Erreur photo : %s</string>
+
+    <!-- ── Notifications ──────────────────────────────────────────────── -->
+    <string name="notif_channel_name">Santé des plantes</string>
+    <string name="notif_channel_desc">Alertes quand une plante a besoin d\'attention</string>
+    <string name="notif_help_title">%s a besoin d\'aide 🌱</string>
+    <string name="notif_help_concerned">%s a besoin d\'attention — vérifie ses capteurs.</string>
+    <string name="notif_help_sad">%s souffre, agis vite !</string>
 </resources>

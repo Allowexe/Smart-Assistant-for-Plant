@@ -125,4 +125,11 @@
     <string name="btn_allow_camera">Allow camera</string>
     <string name="save_success">« %s » saved!</string>
     <string name="photo_error">Photo error: %s</string>
+
+    <!-- ── Notifications ──────────────────────────────────────────────── -->
+    <string name="notif_channel_name">Plant health</string>
+    <string name="notif_channel_desc">Alerts when a plant needs attention</string>
+    <string name="notif_help_title">%s needs help 🌱</string>
+    <string name="notif_help_concerned">%s needs attention — check its sensors.</string>
+    <string name="notif_help_sad">%s is suffering, act fast!</string>
 </resources>
